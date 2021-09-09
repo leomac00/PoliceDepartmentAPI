@@ -1,0 +1,134 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>DesafioAPI</name>
+    </assembly>
+    <members>
+        <member name="M:DesafioAPI.Controllers.AdressesController.Register(DesafioAPI.Models.AdressDTO)">
+            <summary>Register a new Adress based on BODY information.</summary>
+        </member>
+        <member name="M:DesafioAPI.Controllers.AdressesController.Get(System.Int32)">
+            <summary>Returns all adresses from database, or in case of given Id return corresponding adress.</summary>
+        </member>
+        <member name="M:DesafioAPI.Controllers.AdressesController.Update(DesafioAPI.Models.AdressDTO,System.Int32)">
+            <summary>Updates Adress based on BODY information.</summary>
+        </member>
+        <member name="M:DesafioAPI.Controllers.ArrestsController.Register(DesafioAPI.Models.ArrestDTO)">
+            <summary>Register a new Arrest to the database based on BODY information.</summary>
+        </member>
+        <member name="M:DesafioAPI.Controllers.ArrestsController.Get(System.Int32)">
+            <summary>Returns all arrests from database, or in case of given Id return corresponding arrest.</summary>
+        </member>
+        <member name="M:DesafioAPI.Controllers.ArrestsController.Update(DesafioAPI.Models.ArrestDTO,System.Int32)">
+            <summary>Updates Arrest based on BODY information.</summary>
+        </member>
+        <member name="M:DesafioAPI.Controllers.ArrestsController.Delete(System.Int32)">
+            <summary>Deletes Crime based on ID.</summary>
+        </member>
+        <member name="M:DesafioAPI.Controllers.AutopsiesController.Register(DesafioAPI.Models.AutopsyDTO)">
+            <summary>Register a new Autopsy to the database based on BODY information.</summary>
+        </member>
+        <member name="M:DesafioAPI.Controllers.AutopsiesController.Get(System.Int32)">
+            <summary>Returns all autopsies from database, or in case of given Id return corresponding autopsy.</summary>
+        </member>
+        <member name="M:DesafioAPI.Controllers.AutopsiesController.Update(DesafioAPI.Models.AutopsyDTO,System.Int32)">
+            <summary>Updates Autopsy based on BODY information.</summary>
+        </member>
+        <member name="M:DesafioAPI.Controllers.AutopsiesController.Delete(System.Int32)">
+            <summary>Deletes Crime based on ID.</summary>
+        </member>
+        <member name="M:DesafioAPI.Controllers.CoronersController.Register(DesafioAPI.Models.CoronerDTO)">
+            <summary>Register a new Coroner to the database based on BODY information.</summary>
+        </member>
+        <member name="M:DesafioAPI.Controllers.CoronersController.Get(System.Int32)">
+            <summary>Returns all coroners from database, or in case of given Id return corresponding police coroner.</summary>
+        </member>
+        <member name="M:DesafioAPI.Controllers.CoronersController.Update(DesafioAPI.Models.CoronerDTO,System.Int32)">
+            <summary>Updates Coroner based on BODY information.</summary>
+        </member>
+        <member name="M:DesafioAPI.Controllers.CoronersController.Delete(System.Int32)">
+            <summary>Deletes Coroner based on ID.</summary>
+        </member>
+        <member name="M:DesafioAPI.Controllers.CrimesController.Register(DesafioAPI.Models.CrimeDTO)">
+            <summary>Register a new Crime to the database based on BODY information.</summary>
+        </member>
+        <member name="M:DesafioAPI.Controllers.CrimesController.Get(System.Int32)">
+            <summary>Returns all crimes from database, or in case of given Id return corresponding crime.</summary>
+        </member>
+        <member name="M:DesafioAPI.Controllers.CrimesController.Update(DesafioAPI.Models.CrimeDTO,System.Int32)">
+            <summary>Updates Crime based on BODY information.</summary>
+        </member>
+        <member name="M:DesafioAPI.Controllers.CrimesController.Delete(System.Int32)">
+            <summary>Deletes Crime based on ID.</summary>
+        </member>
+        <member name="M:DesafioAPI.Controllers.DeputiesController.Register(DesafioAPI.Models.DeputyDTO)">
+            <summary>Register a new Deputy to the database based on BODY information.</summary>
+        </member>
+        <member name="M:DesafioAPI.Controllers.DeputiesController.Get(System.Int32)">
+            <summary>Returns all deputies from database, or in case of given Id return corresponding deputy.</summary>
+        </member>
+        <member name="M:DesafioAPI.Controllers.DeputiesController.Update(DesafioAPI.Models.DeputyDTO,System.Int32)">
+            <summary>Updates Deputy based on BODY information.</summary>
+        </member>
+        <member name="M:DesafioAPI.Controllers.DeputiesController.Delete(System.Int32)">
+            <summary>Deletes Deputy based on ID.</summary>
+        </member>
+        <member name="M:DesafioAPI.Controllers.PDController.Register(DesafioAPI.Models.PoliceDepartmentDTO)">
+            <summary>Register a new Police Department to the database based on BODY information.</summary>
+        </member>
+        <member name="M:DesafioAPI.Controllers.PDController.Get(System.Int32)">
+            <summary>Returns all PDs from database, or in case of given Id return corresponding Police Department.</summary>
+        </member>
+        <member name="M:DesafioAPI.Controllers.PDController.Update(DesafioAPI.Models.PoliceDepartmentDTO,System.Int32)">
+            <summary>Updates Police Department based on BODY information.</summary>
+        </member>
+        <member name="M:DesafioAPI.Controllers.PDController.Delete(System.Int32)">
+            <summary>Deletes Police Department based on ID.</summary>
+        </member>
+        <member name="M:DesafioAPI.Controllers.PerpetratorsController.Register(DesafioAPI.Models.PerpetratorDTO)">
+            <summary>Register a new Perpetrator to the database based on BODY information.</summary>
+        </member>
+        <member name="M:DesafioAPI.Controllers.PerpetratorsController.Get(System.Int32)">
+            <summary>Returns all perpetrators from database, or in case of given Id return corresponding perpetrator.</summary>
+        </member>
+        <member name="M:DesafioAPI.Controllers.PerpetratorsController.Update(DesafioAPI.Models.PerpetratorDTO,System.Int32)">
+            <summary>Updates Perpetrator based on BODY information.</summary>
+        </member>
+        <member name="M:DesafioAPI.Controllers.PerpetratorsController.Delete(System.Int32)">
+            <summary>Deletes Perpetrator based on ID.</summary>
+        </member>
+        <member name="M:DesafioAPI.Controllers.PoliceOfficersController.Register(DesafioAPI.Models.PoliceOfficerDTO)">
+            <summary>Register a new Police Officer to the database based on BODY information.</summary>
+        </member>
+        <member name="M:DesafioAPI.Controllers.PoliceOfficersController.Get(System.Int32)">
+            <summary>Returns all police officers from database, or in case of given Id return corresponding police officer.</summary>
+        </member>
+        <member name="M:DesafioAPI.Controllers.PoliceOfficersController.Update(DesafioAPI.Models.PoliceOfficerDTO,System.Int32)">
+            <summary>Updates Police Officer based on BODY information.</summary>
+        </member>
+        <member name="M:DesafioAPI.Controllers.PoliceOfficersController.Delete(System.Int32)">
+            <summary>Deletes Police Officer based on ID.</summary>
+        </member>
+        <member name="M:DesafioAPI.Controllers.UsersController.Register(DesafioAPI.Models.UserDTO)">
+            <summary>Register a new user in database based on BODY information.</summary>
+        </member>
+        <member name="M:DesafioAPI.Controllers.UsersController.Login(DesafioAPI.Models.UserCredentials)">
+            <summary>Logs a user in based on BODY information.</summary>
+        </member>
+        <member name="M:DesafioAPI.Controllers.UsersController.Delete(System.String)">
+            <summary>Deletes a user based on its RegisterId (UserName).</summary>
+        </member>
+        <member name="M:DesafioAPI.Controllers.VictimsController.Register(DesafioAPI.Models.VictimDTO)">
+            <summary>Register a new Victim to the database based on BODY information.</summary>
+        </member>
+        <member name="M:DesafioAPI.Controllers.VictimsController.Get(System.Int32)">
+            <summary>Returns all victims from database, or in case of given Id return corresponding victim.</summary>
+        </member>
+        <member name="M:DesafioAPI.Controllers.VictimsController.Update(DesafioAPI.Models.VictimDTO,System.Int32)">
+            <summary>Updates Victim based on BODY information.</summary>
+        </member>
+        <member name="M:DesafioAPI.Controllers.VictimsController.Delete(System.Int32)">
+            <summary>Deletes Victim based on ID.</summary>
+        </member>
+    </members>
+</doc>
