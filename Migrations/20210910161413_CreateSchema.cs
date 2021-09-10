@@ -203,7 +203,7 @@ namespace DesafioAPI.Migrations
                     Name = table.Column<string>(nullable: true),
                     CPF = table.Column<string>(nullable: true),
                     PoliceDepartmentId = table.Column<int>(nullable: true),
-                    ShiftCode = table.Column<int>(nullable: false),
+                    Shift = table.Column<string>(nullable: true),
                     RegisterId = table.Column<string>(nullable: true),
                     Status = table.Column<bool>(nullable: false)
                 },
@@ -227,6 +227,7 @@ namespace DesafioAPI.Migrations
                     OfficerId = table.Column<int>(nullable: true),
                     DeputyId = table.Column<int>(nullable: true),
                     CrimeId = table.Column<int>(nullable: true),
+                    PerpetratorId = table.Column<int>(nullable: true),
                     Date = table.Column<DateTime>(nullable: false),
                     Status = table.Column<bool>(nullable: false)
                 },
@@ -251,6 +252,12 @@ namespace DesafioAPI.Migrations
                         principalTable: "PoliceOfficers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Arrests_Perpetrators_PerpetratorId",
+                        column: x => x.PerpetratorId,
+                        principalTable: "Perpetrators",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -267,6 +274,11 @@ namespace DesafioAPI.Migrations
                 name: "IX_Arrests_OfficerId",
                 table: "Arrests",
                 column: "OfficerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Arrests_PerpetratorId",
+                table: "Arrests",
+                column: "PerpetratorId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Autopsies_CoronerId",

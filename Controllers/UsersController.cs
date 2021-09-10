@@ -130,6 +130,50 @@ namespace DesafioAPI.Controllers
             }
         }
 
+        //GET
+        ///<summary>Returns all police officers from database, or in case of given Id return corresponding police officer.</summary>
+        [Authorize(Roles = "Judge, Lawyer")]
+        [HttpGet("{id?}")]
+        public IActionResult Get(int id = 0)
+        {
+            try
+            {
+                if (id == 0)
+                {
+                    var users = database.Users.Where(item => item.Status).ToList();
+                    var usersInfo = new List<UserInfo>();
+                    foreach (var item in users)
+                    {
+                        var userInfo = new UserInfo()
+                        {
+                            Name = item.Name,
+                            CPF = item.CPF,
+                            RegisterId = item.RegisterId,
+                            UserRole = item.UserRole,
+                        };
+                        usersInfo.Add(userInfo);
+                    }
+                    return Ok(usersInfo);
+                }
+                else
+                {
+                    var user = database.Users.Where(item => item.Status).First(item => item.Id == id);
+                    var userInfo = new UserInfo()
+                    {
+                        Name = user.Name,
+                        CPF = user.CPF,
+                        RegisterId = user.RegisterId,
+                        UserRole = user.UserRole,
+                    };
+                    return Ok(userInfo);
+                }
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { Msg = "An error occurred while getting the information.", Error = e.Message });
+            }
+        }
+
         //DELETE
         ///<summary>Deletes a user based on its RegisterId (UserName).</summary>
         [Authorize(Roles = "Judge")]

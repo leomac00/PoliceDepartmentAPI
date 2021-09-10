@@ -19,7 +19,7 @@ namespace DesafioAPI.Models
 
         [Required(ErrorMessage = "Shift Code is mandatory.")]
         [Range(0, 2, ErrorMessage = "Shift code should be: 0 = Morning; 1 = Evening; 2 = Night;")]
-        public int ShiftCode { get; set; } //0 = morning; 1 = evening; 2 = night
+        public int ShiftCode { get; set; } //0 = Morning; 1 = Evening; 2 = Night
 
 
 

@@ -1,4 +1,2 @@
-- Botar descrição de quem cada entidade é no readme
-- Colocar no readme descrição de como deve ser inserido cpf e telefone
 - Ver como colocar bearer token no swagger
-- Falar que nao coloquei delegacia na prisao pois já tem o delegado e seria um por delegacia
+- Put some images inside README

@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DesafioAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210908141806_CreateSchema")]
+    [Migration("20210910161413_CreateSchema")]
     partial class CreateSchema
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -66,6 +66,9 @@ namespace DesafioAPI.Migrations
                     b.Property<int?>("OfficerId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("PerpetratorId")
+                        .HasColumnType("int");
+
                     b.Property<bool>("Status")
                         .HasColumnType("tinyint(1)");
 
@@ -76,6 +79,8 @@ namespace DesafioAPI.Migrations
                     b.HasIndex("DeputyId");
 
                     b.HasIndex("OfficerId");
+
+                    b.HasIndex("PerpetratorId");
 
                     b.ToTable("Arrests");
                 });
@@ -186,8 +191,8 @@ namespace DesafioAPI.Migrations
                     b.Property<string>("RegisterId")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
-                    b.Property<int>("ShiftCode")
-                        .HasColumnType("int");
+                    b.Property<string>("Shift")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<bool>("Status")
                         .HasColumnType("tinyint(1)");
@@ -332,6 +337,10 @@ namespace DesafioAPI.Migrations
                     b.HasOne("DesafioAPI.Models.PoliceOfficer", "Officer")
                         .WithMany()
                         .HasForeignKey("OfficerId");
+
+                    b.HasOne("DesafioAPI.Models.Perpetrator", "Perpetrator")
+                        .WithMany()
+                        .HasForeignKey("PerpetratorId");
                 });
 
             modelBuilder.Entity("DesafioAPI.Models.Autopsy", b =>

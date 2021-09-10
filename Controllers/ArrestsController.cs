@@ -119,8 +119,8 @@ namespace DesafioAPI.Controllers
                     var arrests = database.Arrests
                      .Include(item => item.Officer)
                      .Include(item => item.Perpetrator)
-                     .Include(item => item.Deputy)
-                     .Include(item => item.Crime)
+                     .Include(item => item.Deputy.PoliceDepartment.Adress)
+                     .Include(item => item.Crime.Victim)
                      .Where(item => item.Status)
                      .ToList();
                     return Ok(arrests);
@@ -130,8 +130,8 @@ namespace DesafioAPI.Controllers
                     var arrest = database.Arrests
                      .Include(item => item.Officer)
                      .Include(item => item.Perpetrator)
-                     .Include(item => item.Deputy)
-                     .Include(item => item.Crime)
+                     .Include(item => item.Deputy.PoliceDepartment.Adress)
+                     .Include(item => item.Crime.Victim)
                      .Where(item => item.Status && item.Id == id)
                      .ToList();
                     return Ok(arrest);

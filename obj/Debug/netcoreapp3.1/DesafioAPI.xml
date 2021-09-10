@@ -115,6 +115,9 @@
         <member name="M:DesafioAPI.Controllers.UsersController.Login(DesafioAPI.Models.UserCredentials)">
             <summary>Logs a user in based on BODY information.</summary>
         </member>
+        <member name="M:DesafioAPI.Controllers.UsersController.Get(System.Int32)">
+            <summary>Returns all police officers from database, or in case of given Id return corresponding police officer.</summary>
+        </member>
         <member name="M:DesafioAPI.Controllers.UsersController.Delete(System.String)">
             <summary>Deletes a user based on its RegisterId (UserName).</summary>
         </member>
