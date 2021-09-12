@@ -1,2 +1,5 @@
-- Ver como colocar bearer token no swagger
 - Put some images inside README
+- Criar os seguintes endpoints:
+/api/delegado/asc Listar os delegados em ordem alfabética crescente por nome
+/api/delegado/desc Listar os delegados em ordem alfabética decrescente por nome
+/api/policial/nome/{nome} Buscar policial por nome
