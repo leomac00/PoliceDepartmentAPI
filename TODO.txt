@@ -1,3 +1,4 @@
+- fazer o push do ultimo commit para o gitlab
 - Put some images inside README
 - Criar os seguintes endpoints:
 /api/delegado/asc Listar os delegados em ordem alfabética crescente por nome

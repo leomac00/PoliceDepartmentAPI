@@ -56,7 +56,7 @@ namespace DesafioAPI
                     Name = "JWT Authentication",
                     In = ParameterLocation.Header,
                     Type = SecuritySchemeType.Http,
-                    Description = "Insert your JWT Token bellow!",
+                    Description = "Insert your JWT Token from **Login** requisition bellow.",
 
                     Reference = new OpenApiReference
                     {
