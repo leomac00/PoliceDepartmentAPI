@@ -99,7 +99,7 @@ namespace DesafioAPI.Controllers
         ///<summary>Returns all deputies from database in ascending order</summary>
         [Authorize(Roles = "Judge, Lawyer")]
         [HttpGet("asc")]
-        public IActionResult GetAsc()
+        public IActionResult AscendingGet()
         {
             try
             {
@@ -115,7 +115,7 @@ namespace DesafioAPI.Controllers
         ///<summary>Returns all deputies from database in descending order</summary>
         [Authorize(Roles = "Judge, Lawyer")]
         [HttpGet("desc")]
-        public IActionResult GetDesc()
+        public IActionResult DescendingGet()
         {
             try
             {

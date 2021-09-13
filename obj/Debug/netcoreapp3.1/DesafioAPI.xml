@@ -70,10 +70,10 @@
         <member name="M:DesafioAPI.Controllers.DeputiesController.Get(System.Int32)">
             <summary>Returns all deputies from database, or in case of given Id return corresponding deputy.</summary>
         </member>
-        <member name="M:DesafioAPI.Controllers.DeputiesController.GetAsc">
+        <member name="M:DesafioAPI.Controllers.DeputiesController.AscendingGet">
             <summary>Returns all deputies from database in ascending order</summary>
         </member>
-        <member name="M:DesafioAPI.Controllers.DeputiesController.GetDesc">
+        <member name="M:DesafioAPI.Controllers.DeputiesController.DescendingGet">
             <summary>Returns all deputies from database in descending order</summary>
         </member>
         <member name="M:DesafioAPI.Controllers.DeputiesController.Update(DesafioAPI.Models.DeputyDTO,System.Int32)">
