@@ -6,11 +6,11 @@ namespace DesafioAPI.Models
     public class Arrest
     {
         public int Id { get; set; }
-        public PoliceOfficer Officer { get; set; }
-        public Deputy Deputy { get; set; }
-        public Crime Crime { get; set; }
-        public Perpetrator Perpetrator { get; set; }
         public DateTime Date { get; set; }
+        public Crime Crime { get; set; }
+        public Deputy Deputy { get; set; }
+        public PoliceOfficer Officer { get; set; }
+        public Perpetrator Perpetrator { get; set; }
         public bool Status { get; set; }
     }
     public class ArrestDTO

@@ -5,9 +5,9 @@ namespace DesafioAPI.Models
     public class Deputy : Person
     {
         public int Id { get; set; }
-        public PoliceDepartment PoliceDepartment { get; set; }
-        public string Shift { get; set; } //0 = morning; 1 = evening; 2 = night
         public string RegisterId { get; set; }
+        public string Shift { get; set; } //0 = morning; 1 = evening; 2 = night
+        public PoliceDepartment PoliceDepartment { get; set; }
         public bool Status { get; set; }
     }
     public class DeputyDTO : PersonDTO

@@ -5,8 +5,8 @@ namespace DesafioAPI.Models
     public class PoliceOfficer : Person
     {
         public int Id { get; set; }
-        public string RegisterId { get; set; }
         public string Rank { get; set; }
+        public string RegisterId { get; set; }
         public bool Status { get; set; }
     }
     public class PoliceOfficerDTO : PersonDTO

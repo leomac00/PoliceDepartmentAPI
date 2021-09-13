@@ -19,21 +19,20 @@ What things you need to install the software and how to install them
 2. Create the MySql Schema using the information below:
 
 > server=localhost;port=3306;
+>
 > database=desafioapi;
+>
 > uid=root;
-> password=root
+>
+> password=root;
 
 3. Run the following commands:
 
 ```
 dotnet restore
-```
 
-```
 dotnet ef database update
-```
 
-```
 dotnet watch run
 ```
 
@@ -41,20 +40,33 @@ Then just access : https://localhost:5001/swagger/index.html to get information 
 
 ### Running
 
-To be able to access all methods you will need to [Register](https://localhost:5001/api/v1/users/Register) and then [Log in](https://localhost:5001/api/v1/users/Login).
+To be able to access all methods you will need to [Register](https://localhost:5001/api/v1/users/Register) and then [Log in](https://localhost:5001/.api/v1/users/Login).
 
-In order to do so you will no to make a POST request to [Register](https://localhost:5001/api/v1/users/register) using the BODY example as described in the [SWAGGER](https://localhost:5001/swagger/index.html) doccumentation.
+In order to do so you will no to make a POST request to [Register](https://localhost:5001/api/v1/users/register) using the BODY example as described in the [SWAGGER](https://localhost:5001/swagger/index.html) documentation.
 
-After that make another POST request but now to [Log in](https://localhost:5001/api/v1/users/login) using the following BODY example:
+After that make another POST request but now to [Log in](https://localhost:5001/api/v1/users/login) using the info BODY described in SWAGGER.
 
-```
-{
-  "registerId": "lulay",
-  "password": "gft2021"
-}
-```
+Alternatively there are already two users registered to the system, you can use them to test the functionalities, they being:
 
-The POST to Login will return a token, this token needs to be used in the Authorization part of the request in order to access the correct user and validate the current session; it will expire after a few hours.
+> **JUDGE** privileges:
+>
+> ```javascript
+> {
+>   "registerId": "lulay",
+>   "password": "gft2021"
+> }
+> ```
+>
+> **LAWYER** privileges:
+>
+> ```javascript
+> {
+>   "registerId": "i am the law",
+>   "password": "stalone"
+> }
+> ```
+
+The POST request to Login will return a token, this token needs to be used in the Authorization part of the request in order to access the correct user´s privilege and validate the current session; it will expire after a few hours.
 
 ## Built With
 
@@ -74,20 +86,34 @@ In this project all documentation needed was generated using [SWAGGER](https://s
 
 Access [Police departmentAPI/Swagger](https://localhost:5001/swagger/index.html) to read the documentation.
 
-### Entities explanation:
+## Entities:
 
-> - _Person_ : An **Entity** who has a Name and a CPF;
-> - _User_ : A **Person** who is registered in the API Db as either a Judge(CRUD) and Lawyer(GET);
-> - _Victim_ : A **Person** harmed, injured, or killed as a result of a crime, accident, or other event or action;
-> - _Perpetrator_ : A **Person** who carries out a harmful, illegal, or immoral act;
-> - _Adress_ : The description of characteristics of a place;
-> - _Police Department_ : A collection of information regarding a police department such as **Adress**, Phone Number and Name where a **Deputy** works;
-> - _Deputy_ : A **Person** who is n charge of a **PoliceDepartment** for a shift;
-> - _PoliceOfficer_: A **Person** responsible for making **Arrests**;
-> - _Coroner_ : A **Person** who is responsible for performing **Autopsies**;
-> - _Autopsy_ : A postmortem examination to discover the cause of death or the extent of disease of a **Victim**;
-> - _Crime_ : A harmful act performed by a **Perpetator** on a **Victim** that contains information about how it happened, its date and its **Adress**;
-> - _Arrest_ : The act of arresting a **Perpetrator** and creating records about it which should include a **PoliceOfficer**, **Deputy**, **Crime**, and Date;
+**Person** : An **Entity** who has a Name and a CPF;
+
+**User** : A **Person** who is registered in the API Db as either a:
+
+> - Judge: **C**reate, **R**ead, **U**pdate and **D**elete information from database;
+> - Lawyer: Only able to **R**ead information from database;
+
+**Victim** : A **Person** harmed, injured, or killed as a result of a crime, accident, or other event or action;
+
+**Perpetrator** : A **Person** who carries out a harmful, illegal, or immoral act;
+
+**Adress** : The description of characteristics of a place;
+
+**Police Department** : A collection of information regarding a police department such as **Adress**, Phone Number and Name where a **Deputy** works;
+
+**Deputy** : A **Person** who is n charge of a **PoliceDepartment** for a shift;
+
+**Police Officer**: A **Person** responsible for making **Arrests**;
+
+**Coroner** : A **Person** who is responsible for performing **Autopsies**;
+
+**Autopsy** : A postmortem examination to discover the cause of death or the extent of disease of a **Victim**;
+
+**Crime** : A harmful act performed by a **Perpetator** on a **Victim** that contains information about how it happened, its date and its **Adress**;
+
+**Arrest** : The act of arresting a **Perpetrator** and creating records about it which should include a **PoliceOfficer**, **Deputy**, **Crime**, and Date;
 
 ## Swagger:
 
@@ -95,7 +121,7 @@ Access [Police departmentAPI/Swagger](https://localhost:5001/swagger/index.html)
 
 ## Examples:
 
-Autopsy [GET] by ID:
+Autopsy [ GET ] by ID:
 
 ```javascript
 Response: [
@@ -121,11 +147,9 @@ Response: [
 ];
 ```
 
-New Police Officer [POST]:
+New Police Officer [ POST ]:
 
 ```javascript
-
-
 Request:
 {
   "name": "Gandalf",
@@ -150,6 +174,7 @@ Response:
 - CPF format should be: 000.000.000-00;
 - Phone Number format should be: 0000-0000;
 - Date format should be: 00/00/0000;
+- ZIPCode format should be: 00000-000;
 
 ## Authors
 

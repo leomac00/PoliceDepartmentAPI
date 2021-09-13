@@ -5,11 +5,11 @@ namespace DesafioAPI.Models
     public class Adress
     {
         public int Id { get; set; }
+        public string ZIPCode { get; set; }
         public string Street { get; set; }
         public string Number { get; set; }
         public string City { get; set; }
         public string State { get; set; }
-        public string ZIPCode { get; set; }
         public bool Status { get; set; }
     }
     public class AdressDTO
@@ -35,7 +35,7 @@ namespace DesafioAPI.Models
 
 
         [Required(ErrorMessage = "ZIP Code is mandatory.")]
-        [RegularExpression(@"^\d{5}-\d{3}$", ErrorMessage = "Invalid ZIP Code.")]
+        [RegularExpression(@"^\d{5}-\d{3}$", ErrorMessage = "Invalid ZIP Code. Please use the following format '00000-000'.")]
         public string ZIPCode { get; set; }
     }
 }

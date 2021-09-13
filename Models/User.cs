@@ -48,7 +48,7 @@ namespace DesafioAPI.Models
 
     public class UserInfo : Person {
         public int Id { get; set; }
-        public string RegisterId { get; set; } //OAB number
         public string UserRole { get; set; } //0 = Judge; 1 = Lawyer - Left as int for further user´s types (scaling)
+        public string RegisterId { get; set; } //OAB number
     }
 }

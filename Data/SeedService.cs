@@ -64,7 +64,7 @@ namespace DesafioAPI.Data
             database.Adresses.AddRange(adresses);
             database.SaveChanges();
 
-            //PoliceDepartments (Delegacias)
+            //PoliceDepartments = "PDs" (Delegacias)
             PoliceDepartment[] PDs = new PoliceDepartment[5];
             PDs[0] = new PoliceDepartment() { Adress = adresses[0], PhoneNumber = "1111-1111", Name = "Departamento Bacana", Status = true };
             PDs[1] = new PoliceDepartment() { Adress = adresses[1], PhoneNumber = "2222-2222", Name = "Departamento Supimpa", Status = true };
@@ -84,7 +84,7 @@ namespace DesafioAPI.Data
             database.Deputies.AddRange(deputies);
             database.SaveChanges();
 
-            //PoliceOfficers (Policiais)
+            //PoliceOfficers = "POs" (Policiais)
             PoliceOfficer[] POs = new PoliceOfficer[5];
             POs[0] = new PoliceOfficer() { Name = "Capitao Tanaka", CPF = "234.432.234-43", RegisterId = "123tanaka", Rank = "Police captain", Status = true };
             POs[1] = new PoliceOfficer() { Name = "Guarda Belo", CPF = "345.543.345-54", RegisterId = "123Belo", Rank = "Police officer/patrol officer/police detective", Status = true };

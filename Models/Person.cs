@@ -16,7 +16,7 @@ namespace DesafioAPI.Models
 
 
         [Required(ErrorMessage = "User´s CPF is mandatory.")]
-        [RegularExpression(@"([0-9]{2}[\.]?[0-9]{3}[\.]?[0-9]{3}[\/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[\.]?[0-9]{3}[\.]?[0-9]{3}[-]?[0-9]{2})", ErrorMessage = "Invalid CPF.")]
+        [RegularExpression(@"([0-9]{2}[\.]?[0-9]{3}[\.]?[0-9]{3}[\/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[\.]?[0-9]{3}[\.]?[0-9]{3}[-]?[0-9]{2})", ErrorMessage = "Invalid CPF. Please use the following format '000.000.000-00'.")]
         public string CPF { get; set; }
     }
 

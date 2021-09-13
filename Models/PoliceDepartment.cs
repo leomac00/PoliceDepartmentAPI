@@ -5,9 +5,9 @@ namespace DesafioAPI.Models
     public class PoliceDepartment
     {
         public int Id { get; set; }
-        public Adress Adress { get; set; }
-        public string PhoneNumber { get; set; }
         public string Name { get; set; }
+        public string PhoneNumber { get; set; }
+        public Adress Adress { get; set; }
         public bool Status { get; set; }
     }
     public class PoliceDepartmentDTO
@@ -17,7 +17,7 @@ namespace DesafioAPI.Models
 
 
         [Required(ErrorMessage = "PD´s phone number is mandatory.")]
-        [RegularExpression(@"(\(?\d{2}\)?\s)?(\d{4,5}\-\d{4})", ErrorMessage = "Invalid Phone Number.")]
+        [RegularExpression(@"(\(?\d{2}\)?\s)?(\d{4,5}\-\d{4})", ErrorMessage = "Invalid Phone Number. Please use the following format '0000-0000'.")]
         public string PhoneNumber { get; set; }
 
 

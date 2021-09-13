@@ -6,9 +6,9 @@ namespace DesafioAPI.Models
     public class Autopsy
     {
         public int Id { get; set; }
-        public Victim Victim { get; set; }
         public Coroner Coroner { get; set; }
         public DateTime Date { get; set; }
+        public Victim Victim { get; set; }
         public string Description { get; set; }
         public bool Status { get; set; }
     }
