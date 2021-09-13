@@ -96,6 +96,38 @@ namespace DesafioAPI.Controllers
             }
         }
 
+        ///<summary>Returns all deputies from database in ascending order</summary>
+        [Authorize(Roles = "Judge, Lawyer")]
+        [HttpGet("asc")]
+        public IActionResult GetAsc()
+        {
+            try
+            {
+                var deputies = database.Deputies.Include(item => item.PoliceDepartment.Adress).Where(item => item.Status).ToList().OrderBy(item => item.Name);
+                return Ok(deputies);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { Msg = "An error occurred while getting the information.", Error = e.Message });
+            }
+        }
+
+        ///<summary>Returns all deputies from database in descending order</summary>
+        [Authorize(Roles = "Judge, Lawyer")]
+        [HttpGet("desc")]
+        public IActionResult GetDesc()
+        {
+            try
+            {
+                var deputies = database.Deputies.Include(item => item.PoliceDepartment.Adress).Where(item => item.Status).ToList().OrderByDescending(item => item.Name);
+                return Ok(deputies);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { Msg = "An error occurred while getting the information.", Error = e.Message });
+            }
+        }
+
 
         //PATCH
         ///<summary>Updates Deputy based on BODY information.</summary>

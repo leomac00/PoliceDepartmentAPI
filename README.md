@@ -89,18 +89,68 @@ Access [Police departmentAPI/Swagger](https://localhost:5001/swagger/index.html)
 > - _Crime_ : A harmful act performed by a **Perpetator** on a **Victim** that contains information about how it happened, its date and its **Adress**;
 > - _Arrest_ : The act of arresting a **Perpetrator** and creating records about it which should include a **PoliceOfficer**, **Deputy**, **Crime**, and Date;
 
-Swagger:
-IMAGEM DO SWAGGER VEM AQUI!!!
+## Swagger:
 
-Examples:
-IMAGEM DO EXEMPLO DE REQUEST VEM AQUI!!!
+![img](https://i.imgur.com/PaurINY.png)
+
+## Examples:
+
+Autopsy [GET] by ID:
+
+```javascript
+Response: [
+  {
+    id: 1,
+    victim: {
+      id: 1,
+      status: true,
+      name: "Uzumaki Naruto",
+      cpf: "456.456.456-45",
+    },
+    coroner: {
+      id: 1,
+      registerId: "123mandioca",
+      status: true,
+      name: "Bruce Mandioca",
+      cpf: "654.654.654-65",
+    },
+    date: "2021-07-29T00:00:00",
+    description: "The autopsy went very wrong, THE CORPSE IS ALIVE!",
+    status: true,
+  },
+];
+```
+
+New Police Officer [POST]:
+
+```javascript
+
+
+Request:
+{
+  "name": "Gandalf",
+  "cpf": "765.456.098-09",
+  "registerId": "i_love_LOTR",
+  "rankCode": 4
+}
+
+Response:
+{
+  "message": "Police Officer registration to Database complete!",
+  "newOfficer": {
+    "name": "Gandalf",
+    "registerID": "i_love_LOTR",
+    "rank": "Police lieutenant"
+  }
+}
+```
 
 ## Notes
 
-- CPF format: 000.000.000-00;
-- Phone Number format: 0000-0000;
-- Date format: 00/00/0000;
+- CPF format should be: 000.000.000-00;
+- Phone Number format should be: 0000-0000;
+- Date format should be: 00/00/0000;
 
 ## Authors
 
-- **Leonardo Machado** - _Initial work_ - [LeoMac00](https://github.com/leomac00)
+- **Leonardo Machado** - _LOMH_ - [LeoMac00](https://github.com/leomac00)

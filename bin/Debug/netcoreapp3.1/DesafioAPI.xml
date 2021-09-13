@@ -13,6 +13,9 @@
         <member name="M:DesafioAPI.Controllers.AdressesController.Update(DesafioAPI.Models.AdressDTO,System.Int32)">
             <summary>Updates Adress based on BODY information.</summary>
         </member>
+        <member name="M:DesafioAPI.Controllers.AdressesController.Delete(System.Int32)">
+            <summary>Deletes Adress based on ID.</summary>
+        </member>
         <member name="M:DesafioAPI.Controllers.ArrestsController.Register(DesafioAPI.Models.ArrestDTO)">
             <summary>Register a new Arrest to the database based on BODY information.</summary>
         </member>
@@ -67,6 +70,12 @@
         <member name="M:DesafioAPI.Controllers.DeputiesController.Get(System.Int32)">
             <summary>Returns all deputies from database, or in case of given Id return corresponding deputy.</summary>
         </member>
+        <member name="M:DesafioAPI.Controllers.DeputiesController.GetAsc">
+            <summary>Returns all deputies from database in ascending order</summary>
+        </member>
+        <member name="M:DesafioAPI.Controllers.DeputiesController.GetDesc">
+            <summary>Returns all deputies from database in descending order</summary>
+        </member>
         <member name="M:DesafioAPI.Controllers.DeputiesController.Update(DesafioAPI.Models.DeputyDTO,System.Int32)">
             <summary>Updates Deputy based on BODY information.</summary>
         </member>
@@ -102,6 +111,9 @@
         </member>
         <member name="M:DesafioAPI.Controllers.PoliceOfficersController.Get(System.Int32)">
             <summary>Returns all police officers from database, or in case of given Id return corresponding police officer.</summary>
+        </member>
+        <member name="M:DesafioAPI.Controllers.PoliceOfficersController.GetByName(System.String)">
+            <summary>Returns police officer from database based on name given.</summary>
         </member>
         <member name="M:DesafioAPI.Controllers.PoliceOfficersController.Update(DesafioAPI.Models.PoliceOfficerDTO,System.Int32)">
             <summary>Updates Police Officer based on BODY information.</summary>

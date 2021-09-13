@@ -93,6 +93,24 @@ namespace DesafioAPI.Controllers
             }
         }
 
+        ///<summary>Returns police officer from database based on name given.</summary>
+        [Authorize(Roles = "Judge, Lawyer")]
+        [HttpGet("name/{name}")]
+        public IActionResult GetByName(string name)
+        {
+            try
+            {
+                var officer = database.PoliceOfficers
+                .Where(item => item.Status && item.Name.Replace(" ", string.Empty).Equals(name.Replace(" ", string.Empty), StringComparison.InvariantCultureIgnoreCase))
+                .ToList();
+                return Ok(officer);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { Msg = "An error occurred while getting the information.", Error = e.Message });
+            }
+        }
+
 
         //PATCH
         ///<summary>Updates Police Officer based on BODY information.</summary>

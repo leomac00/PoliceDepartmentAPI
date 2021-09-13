@@ -132,6 +132,7 @@ namespace DesafioAPI.Controllers
 
 
         //DELETE
+        ///<summary>Deletes Adress based on ID.</summary>
         [Authorize(Roles = "Judge")]
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
