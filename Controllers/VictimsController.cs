@@ -24,9 +24,12 @@ namespace DesafioAPI.Controllers
         {
             try
             {
-                var victims = database.Victims.ToList();
+                Predicate<Victim> victimChecks = v => v.CPF == victimDTO.CPF;
 
-                if (!victims.Any(v => v.CPF == victimDTO.CPF))
+                var victims = database.Victims.ToList();
+                var victimExists = victims.Any(v => victimChecks(v));
+
+                if (!victimExists)
                 {
                     var victim = new Victim()
                     {
@@ -38,22 +41,48 @@ namespace DesafioAPI.Controllers
                     database.SaveChanges();
 
                     Response.StatusCode = 201;
-                    return new ObjectResult(new { Message = "Victim registration to Database complete!", newVictim = new { Name = victim.Name, CPF = victim.CPF } });
+                    return new ObjectResult(new
+                    {
+                        Message = "Victim registration to Database complete!",
+                        newVictim = new
+                        {
+                            Name = victim.Name,
+                            CPF = victim.CPF
+                        }
+                    });
                 }
                 else
                 {
-                    var victim = victims.First(v => v.CPF == victimDTO.CPF);
+                    var victim = victims.First(v => victimChecks(v));
                     if (victim.Status == false)
                     {
                         victim.Status = true;
                         database.SaveChanges();
                         Response.StatusCode = 200;
-                        return new ObjectResult(new { Message = "Victim already exists, STATUS changed to active!", victim = new { ID = victim.Id, Name = victim.Name, CPF = victim.CPF } });
+                        return new ObjectResult(new
+                        {
+                            Message = "Victim already exists, STATUS changed to active!",
+                            victim = new
+                            {
+                                ID = victim.Id,
+                                Name = victim.Name,
+                                CPF = victim.CPF
+                            }
+                        });
                     }
                     else
                     {
                         Response.StatusCode = 400;
-                        return new ObjectResult(new { Message = "Victim already exists", victim = new { ID = victim.Id, Name = victim.Name, CPF = victim.CPF } });
+                        return new ObjectResult(new
+                        {
+                            Message = "Victim already exists",
+                            victim = new
+                            {
+                                ID = victim.Id,
+                                Name = victim.Name,
+                                CPF = victim.CPF
+                            }
+                        });
 
                     }
                 }
@@ -61,7 +90,11 @@ namespace DesafioAPI.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest(new { Msg = "An error occurred while registering the new victim.", Error = e.Message });
+                return BadRequest(new
+                {
+                    Msg = "An error occurred while registering the new victim.",
+                    Error = e.Message
+                });
             }
         }
 
@@ -87,7 +120,11 @@ namespace DesafioAPI.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest(new { Msg = "An error occurred while getting the information.", Error = e.Message });
+                return BadRequest(new
+                {
+                    Msg = "An error occurred while getting the information.",
+                    Error = e.Message
+                });
             }
         }
 
@@ -100,18 +137,33 @@ namespace DesafioAPI.Controllers
         {
             try
             {
-                var victim = database.Victims.Where(a => a.Status).First(a => a.Id == id);
+                var victim = database.Victims
+                .Where(a => a.Status)
+                .First(a => a.Id == id);
+
                 victim.Name = victimDTO.Name;
                 victim.CPF = victimDTO.CPF;
 
                 database.SaveChanges();
                 Response.StatusCode = 200;
-                return new ObjectResult(new { Message = "Victim´s information updated!", victim = new { Name = victim.Name, CPF = victim.CPF } });
+                return new ObjectResult(new
+                {
+                    Message = "Victim´s information updated!",
+                    victim = new
+                    {
+                        Name = victim.Name,
+                        CPF = victim.CPF
+                    }
+                });
 
             }
             catch (Exception e)
             {
-                return BadRequest(new { Msg = "An error occurred while updating victim´s information.", Error = e.Message });
+                return BadRequest(new
+                {
+                    Msg = "An error occurred while updating victim´s information.",
+                    Error = e.Message
+                });
             }
         }
 
@@ -124,16 +176,31 @@ namespace DesafioAPI.Controllers
         {
             try
             {
-                var victim = database.Victims.Find(id);
+                var victim = database.Victims
+                .Where(item => item.Status)
+                .First(item => item.Id == id);
+
                 victim.Status = false;
 
                 database.SaveChanges();
                 Response.StatusCode = 200;
-                return new ObjectResult(new { Message = "Victim deleted!", victim = new { Name = victim.Name, CPF = victim.CPF } });
+                return new ObjectResult(new
+                {
+                    Message = "Victim deleted!",
+                    victim = new
+                    {
+                        Name = victim.Name,
+                        CPF = victim.CPF
+                    }
+                });
             }
             catch (Exception e)
             {
-                return BadRequest(new { Msg = "An error occurred while updating victim´s information.", Error = e.Message });
+                return BadRequest(new
+                {
+                    Msg = "An error occurred while updating victim´s information.",
+                    Error = e.Message
+                });
             }
         }
     }

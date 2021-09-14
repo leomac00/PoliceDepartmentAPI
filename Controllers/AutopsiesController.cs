@@ -25,9 +25,18 @@ namespace DesafioAPI.Controllers
         {
             try
             {
-                var autopsies = database.Autopsies.Include(item => item.Coroner).Include(item => item.Victim).ToList();
+                Predicate<Autopsy> autopsyChecks = a =>
+                a.Victim.Id == autopsyDTO.VictimId
+                && a.Description.Equals(autopsyDTO.Description);
 
-                if (!autopsies.Any(item => item.Victim.Id == autopsyDTO.VictimId && item.Description.Equals(autopsyDTO.Description)))
+                var autopsies = database.Autopsies
+                .Include(item => item.Coroner)
+                .Include(item => item.Victim)
+                .ToList();
+
+                var autopsyExists = autopsies.Any(item => autopsyChecks(item));
+
+                if (!autopsyExists)
                 {
                     var autopsy = new Autopsy()
                     {
@@ -41,28 +50,62 @@ namespace DesafioAPI.Controllers
                     database.SaveChanges();
 
                     Response.StatusCode = 201;
-                    return new ObjectResult(new { Message = "Autopsy registration to Database complete!", newAutopsy = new { Victim = autopsy.Victim, Coroner = autopsy.Coroner, Date = autopsy.Date, Description = autopsy.Description } });
+                    return new ObjectResult(new
+                    {
+                        Message = "Autopsy registration to Database complete!",
+                        newAutopsy = new
+                        {
+                            Victim = autopsy.Victim,
+                            Coroner = autopsy.Coroner,
+                            Date = autopsy.Date,
+                            Description = autopsy.Description
+                        }
+                    });
                 }
                 else
                 {
-                    var autopsy = autopsies.First(item => item.Victim.Id == autopsyDTO.VictimId && item.Description.Equals(autopsyDTO.Description));
+                    var autopsy = autopsies.First(item => autopsyChecks(item));
                     if (autopsy.Status == false)
                     {
                         autopsy.Status = true;
                         database.SaveChanges();
                         Response.StatusCode = 200;
-                        return new ObjectResult(new { Message = "Autopsy already exists, STATUS changed to active!", Autopsy = new { Victim = autopsy.Victim, Coroner = autopsy.Coroner, Date = autopsy.Date, Description = autopsy.Description } });
+                        return new ObjectResult(new
+                        {
+                            Message = "Autopsy already exists, STATUS changed to active!",
+                            Autopsy = new
+                            {
+                                Victim = autopsy.Victim,
+                                Coroner = autopsy.Coroner,
+                                Date = autopsy.Date,
+                                Description = autopsy.Description
+                            }
+                        });
                     }
                     else
                     {
                         Response.StatusCode = 400;
-                        return new ObjectResult(new { Message = "Autopsy exists", Autopsy = new { Victim = autopsy.Victim, Coroner = autopsy.Coroner, Date = autopsy.Date, Description = autopsy.Description } });
+                        return new ObjectResult(new
+                        {
+                            Message = "Autopsy exists",
+                            Autopsy = new
+                            {
+                                Victim = autopsy.Victim,
+                                Coroner = autopsy.Coroner,
+                                Date = autopsy.Date,
+                                Description = autopsy.Description
+                            }
+                        });
                     }
                 }
             }
             catch (Exception e)
             {
-                return BadRequest(new { Msg = "An error occurred while registering the new Autopsy.", Error = e.Message });
+                return BadRequest(new
+                {
+                    Msg = "An error occurred while registering the new Autopsy.",
+                    Error = e.Message
+                });
             }
         }
 
@@ -77,18 +120,30 @@ namespace DesafioAPI.Controllers
             {
                 if (id == 0)
                 {
-                    var autopsies = database.Autopsies.Include(item => item.Coroner).Include(item => item.Victim).Where(item => item.Status).ToList();
+                    var autopsies = database.Autopsies
+                    .Include(item => item.Coroner)
+                    .Include(item => item.Victim)
+                    .Where(item => item.Status).ToList();
                     return Ok(autopsies);
                 }
                 else
                 {
-                    var autopsy = database.Autopsies.Include(item => item.Coroner).Include(item => item.Victim).Where(item => item.Status && item.Id == id).ToList();
+                    var autopsy = database.Autopsies
+                    .Include(item => item.Coroner)
+                    .Include(item => item.Victim)
+                    .Where(item => item.Status && item.Id == id)
+                    .ToList();
                     return Ok(autopsy);
                 }
             }
             catch (Exception e)
             {
-                return BadRequest(new { Msg = "An error occurred while getting the information.", Error = e.Message });
+                return BadRequest(new
+                {
+                    Msg = "An error occurred while getting the information.",
+
+                    Error = e.Message
+                });
             }
         }
 
@@ -101,7 +156,10 @@ namespace DesafioAPI.Controllers
         {
             try
             {
-                var autopsy = database.Autopsies.Include(item => item.Coroner).Include(item => item.Victim).Where(item => item.Status).First(item => item.Id == id);
+                var autopsy = database.Autopsies.Include(item => item.Coroner)
+                .Include(item => item.Victim)
+                .Where(item => item.Status)
+                .First(item => item.Id == id);
                 autopsy.Victim = database.Victims.Find(autopsyDTO.VictimId);
                 autopsy.Coroner = database.Coroners.Find(autopsyDTO.CoronerId);
                 autopsy.Date = Convert.ToDateTime(autopsyDTO.Date);
@@ -109,12 +167,26 @@ namespace DesafioAPI.Controllers
 
                 database.SaveChanges();
                 Response.StatusCode = 200;
-                return new ObjectResult(new { Message = "Autopsy´s information updated!", Autopsy = new { Victim = autopsy.Victim, Coroner = autopsy.Coroner, Date = autopsy.Date, Description = autopsy.Description } });
+                return new ObjectResult(new
+                {
+                    Message = "Autopsy´s information updated!",
+                    Autopsy = new
+                    {
+                        Victim = autopsy.Victim,
+                        Coroner = autopsy.Coroner,
+                        Date = autopsy.Date,
+                        Description = autopsy.Description
+                    }
+                });
 
             }
             catch (Exception e)
             {
-                return BadRequest(new { Msg = "An error occurred while updating the information.", Error = e.Message });
+                return BadRequest(new
+                {
+                    Msg = "An error occurred while updating the information.",
+                    Error = e.Message
+                });
             }
         }
 
@@ -127,16 +199,35 @@ namespace DesafioAPI.Controllers
         {
             try
             {
-                var autopsy = database.Autopsies.Include(item => item.Coroner).Include(item => item.Victim).Where(item => item.Status).First(item => item.Id == id);
+                var autopsy = database.Autopsies
+                .Include(item => item.Coroner)
+                .Include(item => item.Victim)
+                .Where(item => item.Status)
+                .First(item => item.Id == id);
+
                 autopsy.Status = false;
 
                 database.SaveChanges();
                 Response.StatusCode = 200;
-                return new ObjectResult(new { Message = "Autopsy deleted!", Autopsy = new { Victim = autopsy.Victim, Coroner = autopsy.Coroner, Date = autopsy.Date, Description = autopsy.Description } });
+                return new ObjectResult(new
+                {
+                    Message = "Autopsy deleted!",
+                    Autopsy = new
+                    {
+                        Victim = autopsy.Victim,
+                        Coroner = autopsy.Coroner,
+                        Date = autopsy.Date,
+                        Description = autopsy.Description
+                    }
+                });
             }
             catch (Exception e)
             {
-                return BadRequest(new { Msg = "An error occurred while updating Autopsy´s information.", Error = e.Message });
+                return BadRequest(new
+                {
+                    Msg = "An error occurred while updating Autopsy´s information.",
+                    Error = e.Message
+                });
             }
         }
     }

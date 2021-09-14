@@ -25,6 +25,12 @@ namespace DesafioAPI.Controllers
         {
             try
             {
+                Predicate<Arrest> arrestChecks = a =>
+                a.Perpetrator.Id == arrestDTO.PerpetratorId
+                && a.Crime.Id == arrestDTO.CrimeId
+                && a.Officer.Id == arrestDTO.OfficerId
+                && a.Deputy.Id == arrestDTO.DeputyId;
+
                 var arrests = database.Arrests
                 .Include(item => item.Officer)
                 .Include(item => item.Perpetrator)
@@ -32,15 +38,33 @@ namespace DesafioAPI.Controllers
                 .Include(item => item.Crime)
                 .ToList();
 
-                if (!arrests.Any(item => item.Perpetrator.Id == arrestDTO.PerpetratorId && item.Crime.Id == arrestDTO.CrimeId && item.Officer.Id == arrestDTO.OfficerId && item.Deputy.Id == arrestDTO.DeputyId))
+                var arrestExists = arrests.Any(a => arrestChecks(a));
+
+                if (!arrestExists)
                 {
                     var arrest = new Arrest()
                     {
-                        Officer = database.PoliceOfficers.Where(item => item.Status).First(item => item.Id == arrestDTO.OfficerId),
-                        Deputy = database.Deputies.Where(item => item.Status).First(item => item.Id == arrestDTO.DeputyId),
-                        Crime = database.Crimes.Where(item => item.Status).First(item => item.Id == arrestDTO.CrimeId),
-                        Perpetrator = database.Perpetrators.Where(item => item.Status).First(item => item.Id == arrestDTO.PerpetratorId),
+                        Officer = database.PoliceOfficers
+                        .Where(item => item.Status)
+                        .First(item => item.Id == arrestDTO.OfficerId),
+
+                        Deputy = database.Deputies
+                        .Include(item => item.PoliceDepartment.Adress)
+                        .Where(item => item.Status)
+                        .First(item => item.Id == arrestDTO.DeputyId),
+
+                        Crime = database.Crimes
+                        .Include(item => item.Adress)
+                        .Include(item => item.Victim)
+                        .Where(item => item.Status)
+                        .First(item => item.Id == arrestDTO.CrimeId),
+
+                        Perpetrator = database.Perpetrators
+                        .Where(item => item.Status)
+                        .First(item => item.Id == arrestDTO.PerpetratorId),
+
                         Date = Convert.ToDateTime(arrestDTO.Date),
+
                         Status = true,
                     };
                     database.Arrests.Add(arrest);
@@ -62,7 +86,8 @@ namespace DesafioAPI.Controllers
                 }
                 else
                 {
-                    var arrest = arrests.First(item => item.Perpetrator.Id == arrestDTO.PerpetratorId && item.Crime.Id == arrestDTO.CrimeId && item.Officer.Id == arrestDTO.OfficerId && item.Deputy.Id == arrestDTO.DeputyId);
+                    var arrest = arrests.First(a => arrestChecks(a));
+
                     if (arrest.Status == false)
                     {
                         arrest.Status = true;
@@ -101,7 +126,11 @@ namespace DesafioAPI.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest(new { Msg = "An error occurred while registering the new Arrest.", Error = e.Message });
+                return BadRequest(new
+                {
+                    Msg = "An error occurred while registering the new Arrest.",
+                    Error = e.Message
+                });
             }
         }
 
@@ -114,32 +143,32 @@ namespace DesafioAPI.Controllers
         {
             try
             {
-                if (id == 0)
-                {
-                    var arrests = database.Arrests
+                var arrests = database.Arrests
                      .Include(item => item.Officer)
                      .Include(item => item.Perpetrator)
                      .Include(item => item.Deputy.PoliceDepartment.Adress)
                      .Include(item => item.Crime.Victim)
                      .Where(item => item.Status)
                      .ToList();
+
+                if (id == 0)
+                {
                     return Ok(arrests);
                 }
                 else
                 {
-                    var arrest = database.Arrests
-                     .Include(item => item.Officer)
-                     .Include(item => item.Perpetrator)
-                     .Include(item => item.Deputy.PoliceDepartment.Adress)
-                     .Include(item => item.Crime.Victim)
-                     .Where(item => item.Status && item.Id == id)
-                     .ToList();
+                    var arrest = arrests.Where(item => item.Id == id);
                     return Ok(arrest);
                 }
             }
             catch (Exception e)
             {
-                return BadRequest(new { Msg = "An error occurred while getting the information.", Error = e.Message });
+                return BadRequest(new
+                {
+
+                    Msg = "An error occurred while getting the information.",
+                    Error = e.Message
+                });
             }
         }
 
@@ -160,10 +189,23 @@ namespace DesafioAPI.Controllers
                   .Where(item => item.Status && item.Id == id)
                   .First(item => item.Id == id);
 
-                arrest.Officer = database.PoliceOfficers.Where(item => item.Status).First(item => item.Id == arrestDTO.OfficerId);
-                arrest.Deputy = database.Deputies.Where(item => item.Status).First(item => item.Id == arrestDTO.DeputyId);
-                arrest.Crime = database.Crimes.Where(item => item.Status).First(item => item.Id == arrestDTO.CrimeId);
-                arrest.Perpetrator = database.Perpetrators.Where(item => item.Status).First(item => item.Id == arrestDTO.PerpetratorId);
+
+                arrest.Officer = database.PoliceOfficers
+                .Where(item => item.Status)
+                .First(item => item.Id == arrestDTO.OfficerId);
+
+                arrest.Deputy = database.Deputies
+                .Where(item => item.Status)
+                .First(item => item.Id == arrestDTO.DeputyId);
+
+                arrest.Crime = database.Crimes
+                .Where(item => item.Status)
+                .First(item => item.Id == arrestDTO.CrimeId);
+
+                arrest.Perpetrator = database.Perpetrators
+                .Where(item => item.Status)
+                .First(item => item.Id == arrestDTO.PerpetratorId);
+
                 arrest.Date = Convert.ToDateTime(arrestDTO.Date);
 
                 database.SaveChanges();
@@ -184,7 +226,11 @@ namespace DesafioAPI.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest(new { Msg = "An error occurred while updating the information.", Error = e.Message });
+                return BadRequest(new
+                {
+                    Msg = "An error occurred while updating the information.",
+                    Error = e.Message
+                });
             }
         }
 
@@ -198,12 +244,13 @@ namespace DesafioAPI.Controllers
             try
             {
                 var arrest = database.Arrests
-                                  .Include(item => item.Officer)
-                                  .Include(item => item.Perpetrator)
-                                  .Include(item => item.Deputy)
-                                  .Include(item => item.Crime)
-                                  .Where(item => item.Status && item.Id == id)
-                                  .First(item => item.Id == id);
+                    .Include(item => item.Officer)
+                    .Include(item => item.Perpetrator)
+                    .Include(item => item.Deputy)
+                    .Include(item => item.Crime)
+                    .Where(item => item.Status && item.Id == id)
+                    .First(item => item.Id == id);
+
                 arrest.Status = false;
 
                 database.SaveChanges();
@@ -223,7 +270,11 @@ namespace DesafioAPI.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest(new { Msg = "An error occurred while updating Autopsy´s information.", Error = e.Message });
+                return BadRequest(new
+                {
+                    Msg = "An error occurred while updating Autopsy´s information.",
+                    Error = e.Message
+                });
             }
         }
     }

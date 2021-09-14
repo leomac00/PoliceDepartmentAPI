@@ -25,13 +25,20 @@ namespace DesafioAPI.Controllers
         {
             try
             {
-                var PDs = database.PoliceDepartments.Include(item => item.Adress).ToList();
+                Predicate<PoliceDepartment> PDChecks = p => p.Adress.Id == policeDepartmentDTO.AdressId;
 
-                if (!PDs.Any(item => item.Adress.Id == policeDepartmentDTO.AdressId))
+                var PDs = database.PoliceDepartments
+                .Include(item => item.Adress)
+                .ToList();
+                var PDExists = PDs.Any(item => PDChecks(item));
+
+                if (!PDExists)
                 {
                     var PD = new PoliceDepartment()
                     {
-                        Adress = database.Adresses.First(item => item.Id == policeDepartmentDTO.AdressId && item.Status),
+                        Adress = database.Adresses.First(item => item.Id == policeDepartmentDTO.AdressId
+                        && item.Status),
+
                         PhoneNumber = policeDepartmentDTO.PhoneNumber,
                         Name = policeDepartmentDTO.Name,
                         Status = true,
@@ -40,29 +47,62 @@ namespace DesafioAPI.Controllers
                     database.SaveChanges();
 
                     Response.StatusCode = 201;
-                    return new ObjectResult(new { Message = "Police Department registration to Database complete!", newPD = new { Name = PD.Name, PhoneNumber = PD.PhoneNumber, Adress = PD.Adress } });
+                    return new ObjectResult(new
+                    {
+                        Message = "Police Department registration to Database complete!",
+                        newPD = new
+                        {
+                            Name = PD.Name,
+                            PhoneNumber = PD.PhoneNumber,
+                            Adress = PD.Adress
+                        }
+                    });
                 }
                 else
                 {
-                    var PD = PDs.First(item => item.Adress.Id == policeDepartmentDTO.AdressId);
+                    var PD = PDs.First(item => PDChecks(item));
                     if (PD.Status == false)
                     {
                         PD.Status = true;
                         database.SaveChanges();
                         Response.StatusCode = 200;
-                        return new ObjectResult(new { Message = "Police Department already exists, STATUS changed to active!", PD = new { ID = PD.Id, Name = PD.Name, PhoneNumber = PD.PhoneNumber, Adress = PD.Adress } });
+                        return new ObjectResult(new
+                        {
+                            Message = "Police Department already exists, STATUS changed to active!",
+                            PD = new
+                            {
+                                ID = PD.Id,
+                                Name = PD.Name,
+                                PhoneNumber = PD.PhoneNumber,
+                                Adress = PD.Adress
+                            }
+                        });
                     }
                     else
                     {
                         Response.StatusCode = 400;
-                        return new ObjectResult(new { Message = "Police Department exists", PD = new { ID = PD.Id, Name = PD.Name, PhoneNumber = PD.PhoneNumber, Adress = PD.Adress } });
+                        return new ObjectResult(new
+                        {
+                            Message = "Police Department exists",
+                            PD = new
+                            {
+                                ID = PD.Id,
+                                Name = PD.Name,
+                                PhoneNumber = PD.PhoneNumber,
+                                Adress = PD.Adress
+                            }
+                        });
 
                     }
                 }
             }
             catch (Exception e)
             {
-                return BadRequest(new { Msg = "An error occurred while registering the new Police Department.", Error = e.Message });
+                return BadRequest(new
+                {
+                    Msg = "An error occurred while registering the new Police Department.",
+                    Error = e.Message
+                });
             }
         }
 
@@ -77,7 +117,11 @@ namespace DesafioAPI.Controllers
             {
                 if (id == 0)
                 {
-                    var PDs = database.PoliceDepartments.Include(item => item.Adress).Where(item => item.Status).ToList();
+                    var PDs = database.PoliceDepartments
+                    .Include(item => item.Adress)
+                    .Where(item => item.Status)
+                    .ToList();
+
                     return Ok(PDs);
                 }
                 else
@@ -88,7 +132,11 @@ namespace DesafioAPI.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest(new { Msg = "An error occurred while getting the information.", Error = e.Message });
+                return BadRequest(new
+                {
+                    Msg = "An error occurred while getting the information.",
+                    Error = e.Message
+                });
             }
         }
 
@@ -108,12 +156,25 @@ namespace DesafioAPI.Controllers
 
                 database.SaveChanges();
                 Response.StatusCode = 200;
-                return new ObjectResult(new { Message = "Police Department´s information updated!", PD = new { Name = PD.Name, PhoneNumber = PD.PhoneNumber, Adress = PD.Adress } });
+                return new ObjectResult(new
+                {
+                    Message = "Police Department´s information updated!",
+                    PD = new
+                    {
+                        Name = PD.Name,
+                        PhoneNumber = PD.PhoneNumber,
+                        Adress = PD.Adress
+                    }
+                });
 
             }
             catch (Exception e)
             {
-                return BadRequest(new { Msg = "An error occurred while updating Police Department´s information.", Error = e.Message });
+                return BadRequest(new
+                {
+                    Msg = "An error occurred while updating Police Department´s information.",
+                    Error = e.Message
+                });
             }
         }
 
@@ -126,16 +187,32 @@ namespace DesafioAPI.Controllers
         {
             try
             {
-                var PD = database.PoliceDepartments.Include(item => item.Adress).First(item => item.Id == id); ;
+                var PD = database.PoliceDepartments
+                .Include(item => item.Adress)
+                .First(item => item.Id == id && item.Status);
+
                 PD.Status = false;
 
                 database.SaveChanges();
                 Response.StatusCode = 200;
-                return new ObjectResult(new { Message = "Police Department deleted!", PD = new { Name = PD.Name, PhoneNumber = PD.PhoneNumber, Adress = PD.Adress } });
+                return new ObjectResult(new
+                {
+                    Message = "Police Department deleted!",
+                    PD = new
+                    {
+                        Name = PD.Name,
+                        PhoneNumber = PD.PhoneNumber,
+                        Adress = PD.Adress
+                    }
+                });
             }
             catch (Exception e)
             {
-                return BadRequest(new { Msg = "An error occurred while deleting Police Department´s information.", Error = e.Message });
+                return BadRequest(new
+                {
+                    Msg = "An error occurred while deleting Police Department´s information.",
+                    Error = e.Message
+                });
             }
         }
     }

@@ -103,7 +103,7 @@ Access [Police departmentAPI/Swagger](https://localhost:5001/swagger/index.html)
 
 **Police Department** : A collection of information regarding a police department such as **Adress**, Phone Number and Name where a **Deputy** works;
 
-**Deputy** : A **Person** who is n charge of a **PoliceDepartment** for a shift;
+**Deputy** : A **Person** who is n charge of a **Police Department** for a shift;
 
 **Police Officer**: A **Person** responsible for making **Arrests**;
 
@@ -113,11 +113,11 @@ Access [Police departmentAPI/Swagger](https://localhost:5001/swagger/index.html)
 
 **Crime** : A harmful act performed by a **Perpetator** on a **Victim** that contains information about how it happened, its date and its **Adress**;
 
-**Arrest** : The act of arresting a **Perpetrator** and creating records about it which should include a **PoliceOfficer**, **Deputy**, **Crime**, and Date;
+**Arrest** : The act of arresting a **Perpetrator** and creating records about it which should include a **Police Officer**, **Deputy**, **Crime**, and Date;
 
 ## Swagger:
 
-![img](https://i.imgur.com/PaurINY.png)
+![img](https://i.imgur.com/iZa6sYX.png)
 
 ## Examples:
 

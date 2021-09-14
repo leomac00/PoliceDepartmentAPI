@@ -24,9 +24,12 @@ namespace DesafioAPI.Controllers
         {
             try
             {
-                var perpetrators = database.Perpetrators.ToList();
+                Predicate<Perpetrator> perpetratorChecks = p => p.CPF == PerpetratorDTO.CPF;
 
-                if (!perpetrators.Any(p => p.CPF == PerpetratorDTO.CPF))
+                var perpetrators = database.Perpetrators.ToList();
+                var perpetratorExists = perpetrators.Any(item => perpetratorChecks(item));
+
+                if (!perpetratorExists)
                 {
                     var perpetrator = new Perpetrator()
                     {
@@ -38,22 +41,48 @@ namespace DesafioAPI.Controllers
                     database.SaveChanges();
 
                     Response.StatusCode = 201;
-                    return new ObjectResult(new { Message = "Perpetrator registration to Database complete!", newPerpetrator = new { Name = perpetrator.Name, CPF = perpetrator.CPF } });
+                    return new ObjectResult(new
+                    {
+                        Message = "Perpetrator registration to Database complete!",
+                        newPerpetrator = new
+                        {
+                            Name = perpetrator.Name,
+                            CPF = perpetrator.CPF
+                        }
+                    });
                 }
                 else
                 {
-                    var perpetrator = perpetrators.First(p => p.CPF == PerpetratorDTO.CPF);
+                    var perpetrator = perpetrators.First(item => perpetratorChecks(item));
                     if (perpetrator.Status == false)
                     {
                         perpetrator.Status = true;
                         database.SaveChanges();
                         Response.StatusCode = 200;
-                        return new ObjectResult(new { Message = "Perpetrator already exists, STATUS changed to active!", perpetrator = new { ID = perpetrator.Id, Name = perpetrator.Name, CPF = perpetrator.CPF } });
+                        return new ObjectResult(new
+                        {
+                            Message = "Perpetrator already exists, STATUS changed to active!",
+                            perpetrator = new
+                            {
+                                ID = perpetrator.Id,
+                                Name = perpetrator.Name,
+                                CPF = perpetrator.CPF
+                            }
+                        });
                     }
                     else
                     {
                         Response.StatusCode = 400;
-                        return new ObjectResult(new { Message = "Perpetrator already exists", perpetrator = new { ID = perpetrator.Id, Name = perpetrator.Name, CPF = perpetrator.CPF } });
+                        return new ObjectResult(new
+                        {
+                            Message = "Perpetrator already exists",
+                            perpetrator = new
+                            {
+                                ID = perpetrator.Id,
+                                Name = perpetrator.Name,
+                                CPF = perpetrator.CPF
+                            }
+                        });
 
                     }
                 }
@@ -61,7 +90,11 @@ namespace DesafioAPI.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest(new { Msg = "An error occurred while registering the new Perpetrator.", Error = e.Message });
+                return BadRequest(new
+                {
+                    Msg = "An error occurred while registering the new Perpetrator.",
+                    Error = e.Message
+                });
             }
         }
 
@@ -87,7 +120,11 @@ namespace DesafioAPI.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest(new { Msg = "An error occurred while getting the information.", Error = e.Message });
+                return BadRequest(new
+                {
+                    Msg = "An error occurred while getting the information.",
+                    Error = e.Message
+                });
             }
         }
 
@@ -106,12 +143,24 @@ namespace DesafioAPI.Controllers
 
                 database.SaveChanges();
                 Response.StatusCode = 200;
-                return new ObjectResult(new { Message = "Perpetrator´s information updated!", perpetrator = new { Name = perpetrator.Name, CPF = perpetrator.CPF } });
+                return new ObjectResult(new
+                {
+                    Message = "Perpetrator´s information updated!",
+                    perpetrator = new
+                    {
+                        Name = perpetrator.Name,
+                        CPF = perpetrator.CPF
+                    }
+                });
 
             }
             catch (Exception e)
             {
-                return BadRequest(new { Msg = "An error occurred while updating perpetrator´s information.", Error = e.Message });
+                return BadRequest(new
+                {
+                    Msg = "An error occurred while updating perpetrator´s information.",
+                    Error = e.Message
+                });
             }
         }
 
@@ -124,16 +173,29 @@ namespace DesafioAPI.Controllers
         {
             try
             {
-                var perpetrator = database.Perpetrators.Find(id);
+                var perpetrator = database.Perpetrators
+                .First(item => item.Status && item.Id == id);
                 perpetrator.Status = false;
 
                 database.SaveChanges();
                 Response.StatusCode = 200;
-                return new ObjectResult(new { Message = "Perpetrator deleted!", perpetrator = new { Name = perpetrator.Name, CPF = perpetrator.CPF } });
+                return new ObjectResult(new
+                {
+                    Message = "Perpetrator deleted!",
+                    perpetrator = new
+                    {
+                        Name = perpetrator.Name,
+                        CPF = perpetrator.CPF
+                    }
+                });
             }
             catch (Exception e)
             {
-                return BadRequest(new { Msg = "An error occurred while deleting perpetrator.", Error = e.Message });
+                return BadRequest(new
+                {
+                    Msg = "An error occurred while deleting perpetrator.",
+                    Error = e.Message
+                });
             }
         }
 

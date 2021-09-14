@@ -25,9 +25,16 @@ namespace DesafioAPI.Controllers
         {
             try
             {
-                var deputies = database.Deputies.Include(item => item.PoliceDepartment.Adress).ToList();
+                Predicate<Deputy> deputyChecks = d =>
+                d.RegisterId == deputyDTO.RegisterId
+                || d.CPF == deputyDTO.CPF;
 
-                if (!deputies.Any(item => item.RegisterId == deputyDTO.RegisterId || item.CPF == deputyDTO.CPF))
+                var deputies = database.Deputies
+                .Include(item => item.PoliceDepartment.Adress)
+                .ToList();
+                var deputyExists = deputies.Any(item => deputyChecks(item));
+
+                if (!deputyExists)
                 {
                     string shift = DeputyDTO.GetShift(deputyDTO.ShiftCode);
 
@@ -35,7 +42,11 @@ namespace DesafioAPI.Controllers
                     {
                         Name = deputyDTO.Name,
                         CPF = deputyDTO.CPF,
-                        PoliceDepartment = database.PoliceDepartments.Include(item => item.Adress).Where(item => item.Status).First(item => item.Id == deputyDTO.PoliceDepartmentId),
+                        PoliceDepartment = database.PoliceDepartments
+                        .Include(item => item.Adress)
+                        .Where(item => item.Status)
+                        .First(item => item.Id == deputyDTO.PoliceDepartmentId),
+
                         Shift = shift,
                         RegisterId = deputyDTO.RegisterId,
                         Status = true,
@@ -44,7 +55,16 @@ namespace DesafioAPI.Controllers
                     database.SaveChanges();
 
                     Response.StatusCode = 201;
-                    return new ObjectResult(new { Message = "Deputy registration to Database complete!", newDeputy = new { Name = deputy.Name, Shift = deputy.Shift, PoliceDepartment = deputy.PoliceDepartment } });
+                    return new ObjectResult(new
+                    {
+                        Message = "Deputy registration to Database complete!",
+                        newDeputy = new
+                        {
+                            Name = deputy.Name,
+                            Shift = deputy.Shift,
+                            PoliceDepartment = deputy.PoliceDepartment
+                        }
+                    });
                 }
                 else
                 {
@@ -54,19 +74,43 @@ namespace DesafioAPI.Controllers
                         deputy.Status = true;
                         database.SaveChanges();
                         Response.StatusCode = 200;
-                        return new ObjectResult(new { Message = "Deputy already exists, STATUS changed to active!", Deputy = new { ID = deputy.Id, Name = deputy.Name, Shift = deputy.Shift, PoliceDepartment = deputy.PoliceDepartment } });
+                        return new ObjectResult(new
+                        {
+                            Message = "Deputy already exists, STATUS changed to active!",
+                            Deputy = new
+                            {
+                                ID = deputy.Id,
+                                Name = deputy.Name,
+                                Shift = deputy.Shift,
+                                PoliceDepartment = deputy.PoliceDepartment
+                            }
+                        });
                     }
                     else
                     {
                         Response.StatusCode = 400;
-                        return new ObjectResult(new { Message = "Deputy exists", Deputy = new { ID = deputy.Id, Name = deputy.Name, Shift = deputy.Shift, PoliceDepartment = deputy.PoliceDepartment } });
+                        return new ObjectResult(new
+                        {
+                            Message = "Deputy exists",
+                            Deputy = new
+                            {
+                                ID = deputy.Id,
+                                Name = deputy.Name,
+                                Shift = deputy.Shift,
+                                PoliceDepartment = deputy.PoliceDepartment
+                            }
+                        });
 
                     }
                 }
             }
             catch (Exception e)
             {
-                return BadRequest(new { Msg = "An error occurred while registering the new Deputy.", Error = e.Message });
+                return BadRequest(new
+                {
+                    Msg = "An error occurred while registering the new Deputy.",
+                    Error = e.Message
+                });
             }
         }
 
@@ -81,18 +125,30 @@ namespace DesafioAPI.Controllers
             {
                 if (id == 0)
                 {
-                    var deputies = database.Deputies.Include(item => item.PoliceDepartment.Adress).Where(item => item.Status).ToList();
+                    var deputies = database.Deputies
+                    .Include(item => item.PoliceDepartment.Adress)
+                    .Where(item => item.Status)
+                    .ToList();
+
                     return Ok(deputies);
                 }
                 else
                 {
-                    var deputy = database.Deputies.Include(item => item.PoliceDepartment.Adress).Where(item => item.Status && item.Id == id).ToList();
+                    var deputy = database.Deputies
+                    .Include(item => item.PoliceDepartment.Adress)
+                    .Where(item => item.Status && item.Id == id)
+                    .ToList();
+
                     return Ok(deputy);
                 }
             }
             catch (Exception e)
             {
-                return BadRequest(new { Msg = "An error occurred while getting the information.", Error = e.Message });
+                return BadRequest(new
+                {
+                    Msg = "An error occurred while getting the information.",
+                    Error = e.Message
+                });
             }
         }
 
@@ -103,12 +159,22 @@ namespace DesafioAPI.Controllers
         {
             try
             {
-                var deputies = database.Deputies.Include(item => item.PoliceDepartment.Adress).Where(item => item.Status).ToList().OrderBy(item => item.Name);
+                var deputies = database.Deputies
+
+                .Include(item => item.PoliceDepartment.Adress)
+                .Where(item => item.Status)
+                .ToList()
+                .OrderBy(item => item.Name);
+
                 return Ok(deputies);
             }
             catch (Exception e)
             {
-                return BadRequest(new { Msg = "An error occurred while getting the information.", Error = e.Message });
+                return BadRequest(new
+                {
+                    Msg = "An error occurred while getting the information.",
+                    Error = e.Message
+                });
             }
         }
 
@@ -119,12 +185,22 @@ namespace DesafioAPI.Controllers
         {
             try
             {
-                var deputies = database.Deputies.Include(item => item.PoliceDepartment.Adress).Where(item => item.Status).ToList().OrderByDescending(item => item.Name);
+                var deputies = database.Deputies
+                .Include(item => item.PoliceDepartment.Adress)
+                .Where(item => item.Status)
+                .ToList()
+                .OrderByDescending(item => item.Name);
+
                 return Ok(deputies);
             }
             catch (Exception e)
             {
-                return BadRequest(new { Msg = "An error occurred while getting the information.", Error = e.Message });
+                return BadRequest(new
+                {
+
+                    Msg = "An error occurred while getting the information.",
+                    Error = e.Message
+                });
             }
         }
 
@@ -141,18 +217,35 @@ namespace DesafioAPI.Controllers
                 var deputy = database.Deputies.Where(item => item.Status).First(item => item.Id == id);
                 deputy.Name = deputyDTO.Name;
                 deputy.CPF = deputyDTO.CPF;
-                deputy.PoliceDepartment = database.PoliceDepartments.Include(item => item.Adress).Where(item => item.Status).First(item => item.Id == deputyDTO.PoliceDepartmentId);
+                deputy.PoliceDepartment = database.PoliceDepartments
+                .Include(item => item.Adress)
+                .Where(item => item.Status)
+                .First(item => item.Id == deputyDTO.PoliceDepartmentId);
+
                 deputy.Shift = shift;
                 deputy.RegisterId = deputyDTO.RegisterId;
 
                 database.SaveChanges();
                 Response.StatusCode = 200;
-                return new ObjectResult(new { Message = "Deputy´s information updated!", Deputy = new { Name = deputy.Name, Shift = deputy.Shift, PoliceDepartment = deputy.PoliceDepartment } });
+                return new ObjectResult(new
+                {
+                    Message = "Deputy´s information updated!",
+                    Deputy = new
+                    {
+                        Name = deputy.Name,
+                        Shift = deputy.Shift,
+                        PoliceDepartment = deputy.PoliceDepartment
+                    }
+                });
 
             }
             catch (Exception e)
             {
-                return BadRequest(new { Msg = "An error occurred while updating Deputy´s information.", Error = e.Message });
+                return BadRequest(new
+                {
+                    Msg = "An error occurred while updating Deputy´s information.",
+                    Error = e.Message
+                });
             }
         }
 
@@ -165,16 +258,32 @@ namespace DesafioAPI.Controllers
         {
             try
             {
-                var deputy = database.Deputies.Include(item => item.PoliceDepartment.Adress).First(item => item.Id == id);
+                var deputy = database.Deputies
+                .Include(item => item.PoliceDepartment.Adress)
+                .First(item => item.Id == id && item.Status);
+
                 deputy.Status = false;
 
                 database.SaveChanges();
                 Response.StatusCode = 200;
-                return new ObjectResult(new { Message = "Deputy deleted!", Deputy = new { Name = deputy.Name, Shift = deputy.Shift, PoliceDepartment = deputy.PoliceDepartment } });
+                return new ObjectResult(new
+                {
+                    Message = "Deputy deleted!",
+                    Deputy = new
+                    {
+                        Name = deputy.Name,
+                        Shift = deputy.Shift,
+                        PoliceDepartment = deputy.PoliceDepartment
+                    }
+                });
             }
             catch (Exception e)
             {
-                return BadRequest(new { Msg = "An error occurred while updating Deputy´s information.", Error = e.Message });
+                return BadRequest(new
+                {
+                    Msg = "An error occurred while updating Deputy´s information.",
+                    Error = e.Message
+                });
             }
         }
 

@@ -24,9 +24,14 @@ namespace DesafioAPI.Controllers
         {
             try
             {
-                var coroners = database.Coroners.ToList();
+                Predicate<Coroner> coronerChecks = c =>
+                c.RegisterId == coronerDTO.RegisterId
+                || c.CPF == coronerDTO.CPF;
 
-                if (!coroners.Any(item => item.RegisterId == coronerDTO.RegisterId || item.CPF == coronerDTO.CPF))
+                var coroners = database.Coroners.ToList();
+                var coronerExists = coroners.Any(item => coronerChecks(item));
+
+                if (!coronerExists)
                 {
                     var coroner = new Coroner()
                     {
@@ -39,7 +44,11 @@ namespace DesafioAPI.Controllers
                     database.SaveChanges();
 
                     Response.StatusCode = 201;
-                    return new ObjectResult(new { Message = "Coroner registration to Database complete!", newCoroner = new { Name = coroner.Name, RegisterID = coroner.RegisterId } });
+                    return new ObjectResult(new
+                    {
+                        Message = "Coroner registration to Database complete!",
+                        newCoroner = new { Name = coroner.Name, RegisterID = coroner.RegisterId }
+                    });
                 }
                 else
                 {
@@ -49,18 +58,40 @@ namespace DesafioAPI.Controllers
                         coroner.Status = true;
                         database.SaveChanges();
                         Response.StatusCode = 200;
-                        return new ObjectResult(new { Message = "Coroner already exists, STATUS changed to active!", Coroner = new { ID = coroner.Id, Name = coroner.Name, RegisterID = coroner.RegisterId } });
+                        return new ObjectResult(new
+                        {
+                            Message = "Coroner already exists, STATUS changed to active!",
+                            Coroner = new
+                            {
+                                ID = coroner.Id,
+                                Name = coroner.Name,
+                                RegisterID = coroner.RegisterId
+                            }
+                        });
                     }
                     else
                     {
                         Response.StatusCode = 400;
-                        return new ObjectResult(new { Message = "Coroner exists", Coroner = new { ID = coroner.Id, Name = coroner.Name, RegisterID = coroner.RegisterId } });
+                        return new ObjectResult(new
+                        {
+                            Message = "Coroner exists",
+                            Coroner = new
+                            {
+                                ID = coroner.Id,
+                                Name = coroner.Name,
+                                RegisterID = coroner.RegisterId
+                            }
+                        });
                     }
                 }
             }
             catch (Exception e)
             {
-                return BadRequest(new { Msg = "An error occurred while registering the new Coroner.", Error = e.Message });
+                return BadRequest(new
+                {
+                    Msg = "An error occurred while registering the new Coroner.",
+                    Error = e.Message
+                });
             }
         }
 
@@ -86,7 +117,11 @@ namespace DesafioAPI.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest(new { Msg = "An error occurred while getting the information.", Error = e.Message });
+                return BadRequest(new
+                {
+                    Msg = "An error occurred while getting the information.",
+                    Error = e.Message
+                });
             }
         }
 
@@ -106,12 +141,24 @@ namespace DesafioAPI.Controllers
 
                 database.SaveChanges();
                 Response.StatusCode = 200;
-                return new ObjectResult(new { Message = "Coroner´s information updated!", Coroner = new { Name = coroner.Name, RegisterID = coroner.RegisterId } });
+                return new ObjectResult(new
+                {
+                    Message = "Coroner´s information updated!",
+                    Coroner = new
+                    {
+                        Name = coroner.Name,
+                        RegisterID = coroner.RegisterId
+                    }
+                });
 
             }
             catch (Exception e)
             {
-                return BadRequest(new { Msg = "An error occurred while updating Coroner´s information.", Error = e.Message });
+                return BadRequest(new
+                {
+                    Msg = "An error occurred while updating Coroner´s information.",
+                    Error = e.Message
+                });
             }
         }
 
@@ -124,16 +171,28 @@ namespace DesafioAPI.Controllers
         {
             try
             {
-                var coroner = database.Coroners.First(item => item.Id == id);
+                var coroner = database.Coroners.First(item => item.Id == id && item.Status);
                 coroner.Status = false;
 
                 database.SaveChanges();
                 Response.StatusCode = 200;
-                return new ObjectResult(new { Message = "Coroner deleted!", Coroner = new { Name = coroner.Name, RegisterID = coroner.RegisterId } });
+                return new ObjectResult(new
+                {
+                    Message = "Coroner deleted!",
+                    Coroner = new
+                    {
+                        Name = coroner.Name,
+                        RegisterID = coroner.RegisterId
+                    }
+                });
             }
             catch (Exception e)
             {
-                return BadRequest(new { Msg = "An error occurred while deleting Coroners´s information.", Error = e.Message });
+                return BadRequest(new
+                {
+                    Msg = "An error occurred while deleting Coroners´s information.",
+                    Error = e.Message
+                });
             }
         }
 

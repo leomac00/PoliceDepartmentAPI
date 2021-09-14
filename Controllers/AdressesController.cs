@@ -25,29 +25,51 @@ namespace DesafioAPI.Controllers
         {
             try
             {
-                var adressExists = database.Adresses.Any(a =>
-                a.Street == adressDTO.Street
-                && a.City == adressDTO.City
-                && a.Number == adressDTO.Number
-                && a.State == adressDTO.State
-                && a.ZIPCode == adressDTO.ZIPCode);
+                Predicate<Adress> adressChecks = a =>
+                a.Street.Equals(adressDTO.Street)
+                && a.City.Equals(adressDTO.City)
+                && a.Number.Equals(adressDTO.Number)
+                && a.State.Equals(adressDTO.State)
+                && a.ZIPCode.Equals(adressDTO.ZIPCode);
+
+                var adressExists = database.Adresses.ToList().Any(a => adressChecks(a));
+
                 if (adressExists)
                 {
-                    var adress = database.Adresses.First(a =>
-                  a.Street == adressDTO.Street
-                    && a.City == adressDTO.City
-                    && a.Number == adressDTO.Number
-                    && a.State == adressDTO.State
-                    && a.ZIPCode == adressDTO.ZIPCode);
+                    var adress = database.Adresses.ToList().First(a => adressChecks(a));
                     if (adress.Status)
                     {
-                        return Ok(new { Msg = "Adress already exists in database.", adress = new { ID = adress.Id, ZipCode = adress.ZIPCode, City = adress.City, State = adress.State, Street = adress.Street, Number = adress.Number } });
+                        return Ok(new
+                        {
+                            Msg = "Adress already exists in database.",
+                            adress = new
+                            {
+                                ID = adress.Id,
+                                ZipCode = adress.ZIPCode,
+                                City = adress.City,
+                                State = adress.State,
+                                Street = adress.Street,
+                                Number = adress.Number
+                            }
+                        });
                     }
                     else
                     {
                         adress.Status = true;
                         database.SaveChanges();
-                        return Ok(new { Message = "Adress already exists, STATUS changed to active!", adress = new { ID = adress.Id, ZipCode = adress.ZIPCode, City = adress.City, State = adress.State, Street = adress.Street, Number = adress.Number } });
+                        return Ok(new
+                        {
+                            Message = "Adress already exists, STATUS changed to active!",
+                            adress = new
+                            {
+                                ID = adress.Id,
+                                ZipCode = adress.ZIPCode,
+                                City = adress.City,
+                                State = adress.State,
+                                Street = adress.Street,
+                                Number = adress.Number
+                            }
+                        });
                     }
                 }
                 else
@@ -64,7 +86,18 @@ namespace DesafioAPI.Controllers
                     database.Adresses.Add(adressToInsert);
                     database.SaveChanges();
                     Response.StatusCode = 201;
-                    return new ObjectResult(new { Message = "Registration complete!", newAdress = new { ZipCode = adressToInsert.ZIPCode, City = adressToInsert.City, State = adressToInsert.State, Street = adressToInsert.Street, Number = adressToInsert.Number } });
+                    return new ObjectResult(new
+                    {
+                        Message = "Registration complete!",
+                        newAdress = new
+                        {
+                            ZipCode = adressToInsert.ZIPCode,
+                            City = adressToInsert.City,
+                            State = adressToInsert.State,
+                            Street = adressToInsert.Street,
+                            Number = adressToInsert.Number
+                        }
+                    });
 
                 }
             }
@@ -99,7 +132,12 @@ namespace DesafioAPI.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest(new { Msg = "An error occurred while getting the information.", Error = e.Message });
+                return BadRequest(new
+                {
+
+                    Msg = "An error occurred while getting the information.",
+                    Error = e.Message
+                });
             }
         }
 
@@ -121,12 +159,28 @@ namespace DesafioAPI.Controllers
 
                 database.SaveChanges();
                 Response.StatusCode = 200;
-                return new ObjectResult(new { Message = "Adress´s information updated!", adress = new { ZipCode = adress.ZIPCode, City = adress.City, State = adress.State, Street = adress.Street, Number = adress.Number } });
+                return new ObjectResult(new
+                {
+                    Message = "Adress´s information updated!",
+                    adress = new
+                    {
+                        ZipCode = adress.ZIPCode,
+                        City = adress.City,
+                        State = adress.State,
+                        Street = adress.Street,
+                        Number = adress.Number
+                    }
+                });
 
             }
             catch (Exception e)
             {
-                return BadRequest(new { Msg = "An error occurred while updating Address´s information.", Error = e.Message });
+                return BadRequest(new
+                {
+
+                    Msg = "An error occurred while updating Address´s information.",
+                    Error = e.Message
+                });
             }
         }
 
@@ -139,14 +193,33 @@ namespace DesafioAPI.Controllers
         {
             try
             {
-                var adress = database.Adresses.Where(a => a.Status).First(a => a.Id == id);
+                var adress = database.Adresses
+                .Where(a => a.Status)
+                .First(a => a.Id == id);
+
                 adress.Status = false;
+
                 database.SaveChanges();
-                return Ok(new { Msg = "Adress was deleted!", deletedAdress = new { ZipCode = adress.ZIPCode, City = adress.City, State = adress.State, Street = adress.Street, Number = adress.Number } });
+                return Ok(new
+                {
+                    Msg = "Adress was deleted!",
+                    deletedAdress = new
+                    {
+                        ZipCode = adress.ZIPCode,
+                        City = adress.City,
+                        State = adress.State,
+                        Street = adress.Street,
+                        Number = adress.Number
+                    }
+                });
             }
             catch (Exception e)
             {
-                return BadRequest(new { Msg = "An error occurred while deleting Address´s information.", Error = e.Message });
+                return BadRequest(new
+                {
+                    Msg = "An error occurred while deleting Address´s information.",
+                    Error = e.Message
+                });
             }
         }
     }

@@ -27,8 +27,14 @@ namespace DesafioAPI.Controllers
         [HttpPost("Register")]
         public IActionResult Register([FromBody] UserDTO userDTO)
         {
-            var usersTable = database.Users;
-            bool userExists = usersTable.Any(user => user.CPF == userDTO.CPF || user.RegisterId == userDTO.RegisterId);
+            Predicate<User> userChecks = user =>
+            user.CPF == userDTO.CPF
+            || user.RegisterId == userDTO.RegisterId;
+
+            var usersTable = database.Users.ToList();
+
+            bool userExists = usersTable.Any(user => userChecks(user));
+
             try
             {
                 if (!userExists)
@@ -49,21 +55,50 @@ namespace DesafioAPI.Controllers
                     database.SaveChanges();
 
                     Response.StatusCode = 201;
-                    return new ObjectResult(new { Message = "Registration complete!", newUser = new { Name = user.Name, RegisterId = user.RegisterId, Role = user.UserRole } });
+                    return new ObjectResult(new
+                    {
+                        Message = "Registration complete!",
+                        newUser = new
+                        {
+                            Name = user.Name,
+                            RegisterId = user.RegisterId,
+                            Role = user.UserRole
+                        }
+                    });
                 }
                 else
                 {
-                    var user = database.Users.First(u => u.RegisterId == userDTO.RegisterId);
+                    var user = database.Users.First(user => userChecks(user));
                     if (user.Status)
                     {
-                        return BadRequest(new { Msg = "User already exists in database.", user = new { ID = user.Id, Name = user.Name, RegisterId = user.RegisterId, Role = user.UserRole } });
+                        return BadRequest(new
+                        {
+                            Msg = "User already exists in database.",
+                            user = new
+                            {
+                                ID = user.Id,
+                                Name = user.Name,
+                                RegisterId = user.RegisterId,
+                                Role = user.UserRole
+                            }
+                        });
                     }
                     else
                     {
                         user.Status = true;
                         database.SaveChanges();
                         Response.StatusCode = 200;
-                        return new ObjectResult(new { Message = "User already exists, STATUS changed to active!", user = new { ID = user.Id, Name = user.Name, RegisterId = user.RegisterId, Role = user.UserRole } });
+                        return new ObjectResult(new
+                        {
+                            Message = "User already exists, STATUS changed to active!",
+                            user = new
+                            {
+                                ID = user.Id,
+                                Name = user.Name,
+                                RegisterId = user.RegisterId,
+                                Role = user.UserRole
+                            }
+                        });
                     }
 
                 }
@@ -71,7 +106,11 @@ namespace DesafioAPI.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest(new { Msg = "An error occured while registering new user.", Error = e.Message });
+                return BadRequest(new
+                {
+                    Msg = "An error occured while registering new user.",
+                    Error = e.Message
+                });
             }
         }
         ///<summary>Logs a user in based on BODY information.</summary>
@@ -81,7 +120,10 @@ namespace DesafioAPI.Controllers
             User user;
             try
             {
-                user = database.Users.Where(u => u.Status == true).First(u => u.RegisterId == userLogin.RegisterId);
+                user = database.Users
+                .Where(u => u.Status == true)
+                .First(u => u.RegisterId == userLogin.RegisterId);
+
                 if (user != null && user.Status == true)
                 {
                     bool validPassword = BCrypt.Net.BCrypt.Verify(userLogin.Password, user.Password);
@@ -110,7 +152,11 @@ namespace DesafioAPI.Controllers
                         claims: userClaims
                       );
                         var token = new JwtSecurityTokenHandler().WriteToken(JWT);
-                        return Ok(new { Message = "Your token is valid for the next [ " + hoursValid + " ] Hour(s)", Token = token });
+                        return Ok(new
+                        {
+                            Message = "Your token is valid for the next [ " + hoursValid + " ] Hour(s)",
+                            Token = token
+                        });
                     }
                     else
                     {
@@ -121,12 +167,19 @@ namespace DesafioAPI.Controllers
                 else
                 {
                     Response.StatusCode = 401;
-                    return new ObjectResult(new { Message = "User not found." });
+                    return new ObjectResult(new
+                    {
+                        Message = "User not found."
+                    });
                 }
             }
             catch (Exception e)
             {
-                return BadRequest(new { Msg = "An error occured while logging in.", Error = e.Message });
+                return BadRequest(new
+                {
+                    Msg = "An error occured while logging in.",
+                    Error = e.Message
+                });
             }
         }
 
@@ -170,7 +223,11 @@ namespace DesafioAPI.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest(new { Msg = "An error occurred while getting the information.", Error = e.Message });
+                return BadRequest(new
+                {
+                    Msg = "An error occurred while getting the information.",
+                    Error = e.Message
+                });
             }
         }
 
@@ -182,14 +239,21 @@ namespace DesafioAPI.Controllers
         {
             try
             {
-                var user = database.Users.Where(u => u.Status == true).First(u => u.RegisterId == registerId);
+                var user = database.Users
+                .Where(u => u.Status == true)
+                .First(u => u.RegisterId == registerId);
+
                 user.Status = false;
                 database.SaveChanges();
                 return Ok(new { Msg = "User >>> " + user.Name + " <<< was deleted!" });
             }
             catch (Exception e)
             {
-                return BadRequest(new { Msg = "An error occurred while deleting the requested user.", Error = e.Message });
+                return BadRequest(new
+                {
+                    Msg = "An error occurred while deleting the requested user.",
+                    Error = e.Message
+                });
             }
         }
     }

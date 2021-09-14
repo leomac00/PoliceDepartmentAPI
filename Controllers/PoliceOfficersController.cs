@@ -25,9 +25,14 @@ namespace DesafioAPI.Controllers
         {
             try
             {
-                var officers = database.PoliceOfficers.ToList();
+                Predicate<PoliceOfficer> POChecks = p =>
+                p.RegisterId.Equals(officerDTO.RegisterId)
+                || p.CPF.Equals(officerDTO.CPF);
 
-                if (!officers.Any(item => item.RegisterId == officerDTO.RegisterId || item.CPF == officerDTO.CPF))
+                var officers = database.PoliceOfficers.ToList();
+                var officerExists = officers.Any(item => POChecks(item));
+
+                if (!officerExists)
                 {
                     string rank = PoliceOfficerDTO.GetRank(officerDTO.RankCode);
                     var officer = new PoliceOfficer()
@@ -42,28 +47,61 @@ namespace DesafioAPI.Controllers
                     database.SaveChanges();
 
                     Response.StatusCode = 201;
-                    return new ObjectResult(new { Message = "Police Officer registration to Database complete!", newOfficer = new { Name = officer.Name, RegisterID = officer.RegisterId, Rank = officer.Rank } });
+                    return new ObjectResult(new
+                    {
+                        Message = "Police Officer registration to Database complete!",
+                        newOfficer = new
+                        {
+                            Name = officer.Name,
+                            RegisterID = officer.RegisterId,
+                            Rank = officer.Rank
+                        }
+                    });
                 }
                 else
                 {
-                    var officer = officers.First(item => item.RegisterId.Equals(officerDTO.RegisterId));
+                    var officer = officers.First(item => POChecks(item));
                     if (officer.Status == false)
                     {
                         officer.Status = true;
                         database.SaveChanges();
                         Response.StatusCode = 200;
-                        return new ObjectResult(new { Message = "Police Officer already exists, STATUS changed to active!", Officer = new { ID = officer.Id, Name = officer.Name, RegisterID = officer.RegisterId, Rank = officer.Rank } });
+                        return new ObjectResult(new
+                        {
+                            Message = "Police Officer already exists, STATUS changed to active!",
+                            Officer = new
+                            {
+                                ID = officer.Id,
+                                Name = officer.Name,
+                                RegisterID = officer.RegisterId,
+                                Rank = officer.Rank
+                            }
+                        });
                     }
                     else
                     {
                         Response.StatusCode = 400;
-                        return new ObjectResult(new { Message = "Police Officer exists", Officer = new { ID = officer.Id, Name = officer.Name, RegisterID = officer.RegisterId, Rank = officer.Rank } });
+                        return new ObjectResult(new
+                        {
+                            Message = "Police Officer exists",
+                            Officer = new
+                            {
+                                ID = officer.Id,
+                                Name = officer.Name,
+                                RegisterID = officer.RegisterId,
+                                Rank = officer.Rank
+                            }
+                        });
                     }
                 }
             }
             catch (Exception e)
             {
-                return BadRequest(new { Msg = "An error occurred while registering the new Officer.", Error = e.Message });
+                return BadRequest(new
+                {
+                    Msg = "An error occurred while registering the new Officer.",
+                    Error = e.Message
+                });
             }
         }
 
@@ -78,18 +116,28 @@ namespace DesafioAPI.Controllers
             {
                 if (id == 0)
                 {
-                    var officers = database.PoliceOfficers.Where(item => item.Status).ToList();
+                    var officers = database.PoliceOfficers
+                    .Where(item => item.Status)
+                    .ToList();
+
                     return Ok(officers);
                 }
                 else
                 {
-                    var officer = database.PoliceOfficers.Where(item => item.Status && item.Id == id).ToList();
+                    var officer = database.PoliceOfficers
+                    .Where(item => item.Status && item.Id == id)
+                    .ToList();
+
                     return Ok(officer);
                 }
             }
             catch (Exception e)
             {
-                return BadRequest(new { Msg = "An error occurred while getting the information.", Error = e.Message });
+                return BadRequest(new
+                {
+                    Msg = "An error occurred while getting the information.",
+                    Error = e.Message
+                });
             }
         }
 
@@ -101,13 +149,20 @@ namespace DesafioAPI.Controllers
             try
             {
                 var officer = database.PoliceOfficers
-                .Where(item => item.Status && item.Name.Replace(" ", string.Empty).Equals(name.Replace(" ", string.Empty), StringComparison.InvariantCultureIgnoreCase))
+                .Where(item => item.Status && item.Name
+                .Replace(" ", string.Empty)
+                .Equals(name.Replace(" ", string.Empty), StringComparison.InvariantCultureIgnoreCase))
                 .ToList();
+
                 return Ok(officer);
             }
             catch (Exception e)
             {
-                return BadRequest(new { Msg = "An error occurred while getting the information.", Error = e.Message });
+                return BadRequest(new
+                {
+                    Msg = "An error occurred while getting the information.",
+                    Error = e.Message
+                });
             }
         }
 
@@ -121,7 +176,10 @@ namespace DesafioAPI.Controllers
             try
             {
                 string rank = PoliceOfficerDTO.GetRank(officerDTO.RankCode);
-                var officer = database.PoliceOfficers.Where(item => item.Status).First(item => item.Id == id);
+                var officer = database.PoliceOfficers
+                .Where(item => item.Status)
+                .First(item => item.Id == id);
+
                 officer.RegisterId = officerDTO.RegisterId;
                 officer.Name = officerDTO.Name;
                 officer.CPF = officerDTO.CPF;
@@ -129,12 +187,24 @@ namespace DesafioAPI.Controllers
 
                 database.SaveChanges();
                 Response.StatusCode = 200;
-                return new ObjectResult(new { Message = "Police Officer´s information updated!", Officer = new { Name = officer.Name, RegisterID = officer.RegisterId, Rank = officer.Rank } });
-
+                return new ObjectResult(new
+                {
+                    Message = "Police Officer´s information updated!",
+                    Officer = new
+                    {
+                        Name = officer.Name,
+                        RegisterID = officer.RegisterId,
+                        Rank = officer.Rank
+                    }
+                });
             }
             catch (Exception e)
             {
-                return BadRequest(new { Msg = "An error occurred while updating the information.", Error = e.Message });
+                return BadRequest(new
+                {
+                    Msg = "An error occurred while updating the information.",
+                    Error = e.Message
+                });
             }
         }
 
@@ -147,16 +217,30 @@ namespace DesafioAPI.Controllers
         {
             try
             {
-                var officer = database.PoliceOfficers.First(item => item.Id == id);
+                var officer = database.PoliceOfficers
+                .First(item => item.Id == id && item.Status);
                 officer.Status = false;
 
                 database.SaveChanges();
                 Response.StatusCode = 200;
-                return new ObjectResult(new { Message = "Police Officer deleted!", Officer = new { Name = officer.Name, RegisterID = officer.RegisterId, Rank = officer.Rank } });
+                return new ObjectResult(new
+                {
+                    Message = "Police Officer deleted!",
+                    Officer = new
+                    {
+                        Name = officer.Name,
+                        RegisterID = officer.RegisterId,
+                        Rank = officer.Rank
+                    }
+                });
             }
             catch (Exception e)
             {
-                return BadRequest(new { Msg = "An error occurred while deleting information.", Error = e.Message });
+                return BadRequest(new
+                {
+                    Msg = "An error occurred while deleting information.",
+                    Error = e.Message
+                });
             }
         }
     }

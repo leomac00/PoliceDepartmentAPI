@@ -26,9 +26,20 @@ namespace DesafioAPI.Controllers
         {
             try
             {
-                var crimes = database.Crimes.Include(item => item.Perpetrator).Include(item => item.Victim).Include(item => item.Adress).ToList();
+                Predicate<Crime> crimeChecks = c =>
+                c.Perpetrator.Id == crimeDTO.PerpetratorId
+                && c.Victim.Id == crimeDTO.VictimId
+                && c.Description.Equals(crimeDTO.Description);
 
-                if (!crimes.Any(item => item.Perpetrator.Id == crimeDTO.PerpetratorId && item.Victim.Id == crimeDTO.VictimId && item.Description.Equals(crimeDTO.Description)))
+                var crimes = database.Crimes
+                .Include(item => item.Perpetrator)
+                .Include(item => item.Victim)
+                .Include(item => item.Adress)
+                .ToList();
+
+                var crimeExists = crimes.Any(item => crimeChecks(item));
+
+                if (!crimeExists)
                 {
                     var crime = new Crime()
                     {
@@ -43,28 +54,64 @@ namespace DesafioAPI.Controllers
                     database.SaveChanges();
 
                     Response.StatusCode = 201;
-                    return new ObjectResult(new { Message = "Crime registration to Database complete!", newCrime = new { Perpetrator = crime.Perpetrator, Victim = crime.Victim, Date = crime.Date, Adress = crime.Adress } });
+                    return new ObjectResult(new
+                    {
+                        Message = "Crime registration to Database complete!",
+                        newCrime = new
+                        {
+                            Perpetrator = crime.Perpetrator,
+                            Victim = crime.Victim,
+                            Date = crime.Date,
+                            Adress = crime.Adress
+                        }
+                    });
                 }
                 else
                 {
-                    var crime = crimes.First(item => item.Perpetrator.Id == crimeDTO.PerpetratorId && item.Victim.Id == crimeDTO.VictimId && item.Description.Equals(crimeDTO.Description));
+                    var crime = crimes.First(item => crimeChecks(item));
                     if (crime.Status == false)
                     {
                         crime.Status = true;
                         database.SaveChanges();
                         Response.StatusCode = 200;
-                        return new ObjectResult(new { Message = "Crime already exists, STATUS changed to active!", Crime = new { ID = crime.Id, Perpetrator = crime.Perpetrator, Victim = crime.Victim, Date = crime.Date, Adress = crime.Adress } });
+                        return new ObjectResult(new
+                        {
+                            Message = "Crime already exists, STATUS changed to active!",
+                            Crime = new
+                            {
+                                ID = crime.Id,
+                                Perpetrator = crime.Perpetrator,
+                                Victim = crime.Victim,
+                                Date = crime.Date,
+                                Adress = crime.Adress
+                            }
+                        });
                     }
                     else
                     {
                         Response.StatusCode = 400;
-                        return new ObjectResult(new { Message = "Crime exists", Crime = new { ID = crime.Id, Perpetrator = crime.Perpetrator, Victim = crime.Victim, Date = crime.Date, Adress = crime.Adress } });
+                        return new ObjectResult(new
+                        {
+                            Message = "Crime exists",
+                            Crime = new
+                            {
+                                ID = crime.Id,
+                                Perpetrator = crime.Perpetrator,
+                                Victim = crime.Victim,
+                                Date = crime.Date,
+                                Adress = crime.Adress
+                            }
+                        });
                     }
                 }
             }
             catch (Exception e)
             {
-                return BadRequest(new { Msg = "An error occurred while registering the new Crime.", Error = e.Message });
+                return BadRequest(new
+                {
+                    Msg = "An error occurred while registering the new Crime.",
+                    Error = e.Message
+                });
             }
         }
 
@@ -79,18 +126,34 @@ namespace DesafioAPI.Controllers
             {
                 if (id == 0)
                 {
-                    var crimes = database.Crimes.Include(item => item.Adress).Include(item => item.Perpetrator).Include(item => item.Victim).Where(item => item.Status).ToList();
+                    var crimes = database.Crimes
+                    .Include(item => item.Adress)
+                    .Include(item => item.Perpetrator)
+                    .Include(item => item.Victim)
+                    .Where(item => item.Status)
+                    .ToList();
+
                     return Ok(crimes);
                 }
                 else
                 {
-                    var crime = database.Crimes.Include(item => item.Adress).Include(item => item.Perpetrator).Include(item => item.Victim).Where(item => item.Status && item.Id == id).ToList();
+                    var crime = database.Crimes
+                    .Include(item => item.Adress)
+                    .Include(item => item.Perpetrator)
+                    .Include(item => item.Victim)
+                    .Where(item => item.Status && item.Id == id)
+                    .ToList();
+
                     return Ok(crime);
                 }
             }
             catch (Exception e)
             {
-                return BadRequest(new { Msg = "An error occurred while getting the information.", Error = e.Message });
+                return BadRequest(new
+                {
+                    Msg = "An error occurred while getting the information.",
+                    Error = e.Message
+                });
             }
         }
 
@@ -103,7 +166,13 @@ namespace DesafioAPI.Controllers
         {
             try
             {
-                var crime = database.Crimes.Include(item => item.Perpetrator).Include(item => item.Victim).Include(item => item.Adress).Where(item => item.Status).First(item => item.Id == id);
+                var crime = database.Crimes
+                .Include(item => item.Perpetrator)
+                .Include(item => item.Victim)
+                .Include(item => item.Adress)
+                .Where(item => item.Status)
+                .First(item => item.Id == id);
+
                 crime.Perpetrator = database.Perpetrators.Find(crimeDTO.PerpetratorId);
                 crime.Victim = database.Victims.Find(crimeDTO.VictimId);
                 crime.Date = Convert.ToDateTime(crimeDTO.Date);
@@ -112,12 +181,27 @@ namespace DesafioAPI.Controllers
 
                 database.SaveChanges();
                 Response.StatusCode = 200;
-                return new ObjectResult(new { Message = "Crime´s information updated!", Crime = new { ID = crime.Id, Perpetrator = crime.Perpetrator, Victim = crime.Victim, Date = crime.Date, Adress = crime.Adress } });
+                return new ObjectResult(new
+                {
+                    Message = "Crime´s information updated!",
+                    Crime = new
+                    {
+                        ID = crime.Id,
+                        Perpetrator = crime.Perpetrator,
+                        Victim = crime.Victim,
+                        Date = crime.Date,
+                        Adress = crime.Adress
+                    }
+                });
 
             }
             catch (Exception e)
             {
-                return BadRequest(new { Msg = "An error occurred while updating the information.", Error = e.Message });
+                return BadRequest(new
+                {
+                    Msg = "An error occurred while updating the information.",
+                    Error = e.Message
+                });
             }
         }
 
@@ -130,16 +214,36 @@ namespace DesafioAPI.Controllers
         {
             try
             {
-                var crime = database.Crimes.Include(item => item.Adress).Include(item => item.Perpetrator).Include(item => item.Victim).First(item => item.Id == id);
+                var crime = database.Crimes
+                .Include(item => item.Adress)
+                .Include(item => item.Perpetrator)
+                .Include(item => item.Victim)
+                .First(item => item.Id == id && item.Status);
+
                 crime.Status = false;
 
                 database.SaveChanges();
                 Response.StatusCode = 200;
-                return new ObjectResult(new { Message = "Crime deleted!", Crime = new { ID = crime.Id, Perpetrator = crime.Perpetrator, Victim = crime.Victim, Date = crime.Date, Adress = crime.Adress } });
+                return new ObjectResult(new
+                {
+                    Message = "Crime deleted!",
+                    Crime = new
+                    {
+                        ID = crime.Id,
+                        Perpetrator = crime.Perpetrator,
+                        Victim = crime.Victim,
+                        Date = crime.Date,
+                        Adress = crime.Adress
+                    }
+                });
             }
             catch (Exception e)
             {
-                return BadRequest(new { Msg = "An error occurred while updating Crime´s information.", Error = e.Message });
+                return BadRequest(new
+                {
+                    Msg = "An error occurred while updating Crime´s information.",
+                    Error = e.Message
+                });
             }
         }
     }
