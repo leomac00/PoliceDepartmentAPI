@@ -40,7 +40,7 @@ namespace DesafioAPI.Controllers
                 if (!userExists)
                 {
                     var hashedPassword = BCrypt.Net.BCrypt.HashPassword(userDTO.Password);
-                    string userRole = UserDTO.GetRole(userDTO.UserRole);
+                    string userRole = DesafioAPI.Models.User.GetRole(userDTO.UserRole);
                     var user = new User()
                     {
                         Name = userDTO.Name,

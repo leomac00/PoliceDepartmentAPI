@@ -27,6 +27,7 @@ namespace DesafioAPI.Data
                 database.Users.Any() ||
                 database.Victims.Any()
             ) return;
+
             //Users
             User[] users = new User[2];
             users[0] = new User() { Name = "Lulay", CPF = "234.567.800-99", RegisterId = "lulay", UserRole = "Judge", Status = true, Password = "$2b$10$XRyEC0dLHCZizL5sudXqcucXBXEMxUHmmwcXDLrqqQm8Csv.C61Dq" }; //Password = gft2021

@@ -1,3 +1,4 @@
+using System.Collections;
 using System.ComponentModel.DataAnnotations;
 
 namespace DesafioAPI.Models
@@ -9,6 +10,15 @@ namespace DesafioAPI.Models
         public string UserRole { get; set; } //0 = Judge; 1 = Lawyer - Left as int for further user´s types (scaling)
         public string Password { get; set; }
         public bool Status { get; set; }
+
+        public static string GetRole(int roleCode)
+        {
+            var roles = new Hashtable();
+            roles.Add(0, "Judge");
+            roles.Add(1, "Lawyer");
+
+            return roles.ContainsKey(roleCode) ? (string)roles[roleCode] : "Lawyer";
+        }
     }
 
     public class UserDTO : PersonDTO
@@ -23,19 +33,6 @@ namespace DesafioAPI.Models
 
         [Required(ErrorMessage = "User´s Password is mandatory.")]
         public string Password { get; set; }
-
-        public static string GetRole(int roleCode)
-        {
-            switch (roleCode)
-            {
-                case 0:
-                    return "Judge";
-                case 1:
-                    return "Lawyer";
-                default:
-                    return "Lawyer";
-            }
-        }
     }
     public class UserCredentials
     {
@@ -46,7 +43,8 @@ namespace DesafioAPI.Models
         public string Password { get; set; }
     }
 
-    public class UserInfo : Person {
+    public class UserInfo : Person
+    {
         public int Id { get; set; }
         public string UserRole { get; set; } //0 = Judge; 1 = Lawyer - Left as int for further user´s types (scaling)
         public string RegisterId { get; set; } //OAB number
