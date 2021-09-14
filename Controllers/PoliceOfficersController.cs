@@ -114,19 +114,17 @@ namespace DesafioAPI.Controllers
         {
             try
             {
-                if (id == 0)
-                {
-                    var officers = database.PoliceOfficers
+                var officers = database.PoliceOfficers
                     .Where(item => item.Status)
                     .ToList();
 
+                if (id == 0)
+                {
                     return Ok(officers);
                 }
                 else
                 {
-                    var officer = database.PoliceOfficers
-                    .Where(item => item.Status && item.Id == id)
-                    .ToList();
+                    var officer = officers.Where(item => item.Id == id);
 
                     return Ok(officer);
                 }

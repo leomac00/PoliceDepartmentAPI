@@ -124,26 +124,20 @@ namespace DesafioAPI.Controllers
         {
             try
             {
-                if (id == 0)
-                {
-                    var crimes = database.Crimes
+                var crimes = database.Crimes
                     .Include(item => item.Adress)
                     .Include(item => item.Perpetrator)
                     .Include(item => item.Victim)
                     .Where(item => item.Status)
                     .ToList();
 
+                if (id == 0)
+                {
                     return Ok(crimes);
                 }
                 else
                 {
-                    var crime = database.Crimes
-                    .Include(item => item.Adress)
-                    .Include(item => item.Perpetrator)
-                    .Include(item => item.Victim)
-                    .Where(item => item.Status && item.Id == id)
-                    .ToList();
-
+                    var crime = crimes.Where(item => item.Id == id);
                     return Ok(crime);
                 }
             }

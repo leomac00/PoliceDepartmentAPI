@@ -104,14 +104,14 @@ namespace DesafioAPI.Controllers
         {
             try
             {
+                var coroners = database.Coroners.Where(item => item.Status).ToList();
                 if (id == 0)
                 {
-                    var coroners = database.Coroners.Where(item => item.Status).ToList();
                     return Ok(coroners);
                 }
                 else
                 {
-                    var coroner = database.Coroners.Where(item => item.Status && item.Id == id).ToList();
+                    var coroner = coroners.Where(item => item.Id == id);
                     return Ok(coroner);
                 }
             }

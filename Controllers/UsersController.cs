@@ -191,9 +191,10 @@ namespace DesafioAPI.Controllers
         {
             try
             {
+                var users = database.Users.Where(item => item.Status).ToList();
+
                 if (id == 0)
                 {
-                    var users = database.Users.Where(item => item.Status).ToList();
                     var usersInfo = new List<UserInfo>();
                     foreach (var item in users)
                     {
@@ -210,7 +211,7 @@ namespace DesafioAPI.Controllers
                 }
                 else
                 {
-                    var user = database.Users.Where(item => item.Status).First(item => item.Id == id);
+                    var user = users.First(item => item.Id == id);
                     var userInfo = new UserInfo()
                     {
                         Name = user.Name,

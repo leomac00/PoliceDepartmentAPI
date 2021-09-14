@@ -107,14 +107,17 @@ namespace DesafioAPI.Controllers
         {
             try
             {
+                var perpetrators = database.Perpetrators
+                    .Where(p => p.Status)
+                    .ToList();
+
                 if (id == 0)
                 {
-                    var perpetrators = database.Perpetrators.Where(p => p.Status).ToList();
                     return Ok(perpetrators);
                 }
                 else
                 {
-                    var perpetrator = database.Perpetrators.Where(p => p.Status && p.Id == id).ToList();
+                    var perpetrator = perpetrators.Where(p => p.Id == id).ToList();
                     return Ok(perpetrator);
                 }
             }

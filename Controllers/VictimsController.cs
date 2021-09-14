@@ -107,14 +107,15 @@ namespace DesafioAPI.Controllers
         {
             try
             {
+                var victims = database.Victims.Where(v => v.Status).ToList();
+
                 if (id == 0)
                 {
-                    var victims = database.Victims.Where(v => v.Status).ToList();
                     return Ok(victims);
                 }
                 else
                 {
-                    var victim = database.Victims.Where(v => v.Status && v.Id == id).ToList();
+                    var victim = victims.Where(v => v.Id == id);
                     return Ok(victim);
                 }
             }

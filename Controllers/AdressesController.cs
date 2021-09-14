@@ -119,15 +119,15 @@ namespace DesafioAPI.Controllers
         {
             try
             {
+                var adresses = database.Adresses.Where(a => a.Status).ToList();
                 if (id == 0)
                 {
-                    var Adresses = database.Adresses.Where(a => a.Status).ToList();
-                    return Ok(Adresses);
+                    return Ok(adresses);
                 }
                 else
                 {
-                    var Adress = database.Adresses.Where(a => a.Status && a.Id == id).ToList();
-                    return Ok(Adress);
+                    var adress = adresses.Where(a => a.Id == id);
+                    return Ok(adress);
                 }
             }
             catch (Exception e)

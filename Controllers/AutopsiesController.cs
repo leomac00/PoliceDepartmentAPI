@@ -118,21 +118,19 @@ namespace DesafioAPI.Controllers
         {
             try
             {
-                if (id == 0)
-                {
-                    var autopsies = database.Autopsies
+                var autopsies = database.Autopsies
                     .Include(item => item.Coroner)
                     .Include(item => item.Victim)
                     .Where(item => item.Status).ToList();
+
+                if (id == 0)
+                {
                     return Ok(autopsies);
                 }
                 else
                 {
-                    var autopsy = database.Autopsies
-                    .Include(item => item.Coroner)
-                    .Include(item => item.Victim)
-                    .Where(item => item.Status && item.Id == id)
-                    .ToList();
+                    var autopsy = autopsies.Where(item => item.Id == id);
+
                     return Ok(autopsy);
                 }
             }
