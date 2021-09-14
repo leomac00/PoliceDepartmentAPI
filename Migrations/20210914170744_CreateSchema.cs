@@ -14,11 +14,11 @@ namespace DesafioAPI.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    ZIPCode = table.Column<string>(nullable: true),
                     Street = table.Column<string>(nullable: true),
                     Number = table.Column<string>(nullable: true),
                     City = table.Column<string>(nullable: true),
                     State = table.Column<string>(nullable: true),
-                    ZIPCode = table.Column<string>(nullable: true),
                     Status = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
@@ -65,8 +65,8 @@ namespace DesafioAPI.Migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(nullable: true),
                     CPF = table.Column<string>(nullable: true),
-                    RegisterId = table.Column<string>(nullable: true),
                     Rank = table.Column<string>(nullable: true),
+                    RegisterId = table.Column<string>(nullable: true),
                     Status = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
@@ -113,9 +113,9 @@ namespace DesafioAPI.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    AdressId = table.Column<int>(nullable: true),
-                    PhoneNumber = table.Column<string>(nullable: true),
                     Name = table.Column<string>(nullable: true),
+                    PhoneNumber = table.Column<string>(nullable: true),
+                    AdressId = table.Column<int>(nullable: true),
                     Status = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
@@ -135,9 +135,9 @@ namespace DesafioAPI.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    VictimId = table.Column<int>(nullable: true),
                     CoronerId = table.Column<int>(nullable: true),
                     Date = table.Column<DateTime>(nullable: false),
+                    VictimId = table.Column<int>(nullable: true),
                     Description = table.Column<string>(nullable: true),
                     Status = table.Column<bool>(nullable: false)
                 },
@@ -164,11 +164,11 @@ namespace DesafioAPI.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    PerpetratorId = table.Column<int>(nullable: true),
-                    VictimId = table.Column<int>(nullable: true),
                     Date = table.Column<DateTime>(nullable: false),
-                    Description = table.Column<string>(nullable: true),
                     AdressId = table.Column<int>(nullable: true),
+                    Description = table.Column<string>(nullable: true),
+                    VictimId = table.Column<int>(nullable: true),
+                    PerpetratorId = table.Column<int>(nullable: true),
                     Status = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
@@ -202,9 +202,9 @@ namespace DesafioAPI.Migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(nullable: true),
                     CPF = table.Column<string>(nullable: true),
-                    PoliceDepartmentId = table.Column<int>(nullable: true),
-                    Shift = table.Column<string>(nullable: true),
                     RegisterId = table.Column<string>(nullable: true),
+                    Shift = table.Column<string>(nullable: true),
+                    PoliceDepartmentId = table.Column<int>(nullable: true),
                     Status = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
@@ -224,11 +224,11 @@ namespace DesafioAPI.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    OfficerId = table.Column<int>(nullable: true),
-                    DeputyId = table.Column<int>(nullable: true),
-                    CrimeId = table.Column<int>(nullable: true),
-                    PerpetratorId = table.Column<int>(nullable: true),
                     Date = table.Column<DateTime>(nullable: false),
+                    CrimeId = table.Column<int>(nullable: true),
+                    DeputyId = table.Column<int>(nullable: true),
+                    OfficerId = table.Column<int>(nullable: true),
+                    PerpetratorId = table.Column<int>(nullable: true),
                     Status = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>

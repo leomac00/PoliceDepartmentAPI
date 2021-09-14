@@ -34,7 +34,7 @@ namespace DesafioAPI.Controllers
 
                 if (!officerExists)
                 {
-                    string rank = PoliceOfficerDTO.GetRank(officerDTO.RankCode);
+                    string rank = PoliceOfficer.GetRank(officerDTO.RankCode);
                     var officer = new PoliceOfficer()
                     {
                         Name = officerDTO.Name,
@@ -173,7 +173,7 @@ namespace DesafioAPI.Controllers
         {
             try
             {
-                string rank = PoliceOfficerDTO.GetRank(officerDTO.RankCode);
+                string rank = PoliceOfficer.GetRank(officerDTO.RankCode);
                 var officer = database.PoliceOfficers
                 .Where(item => item.Status)
                 .First(item => item.Id == id);
