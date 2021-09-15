@@ -18,7 +18,9 @@ What things you need to install the software and how to install them
 
 2. Create the MySql Schema using the information below:
 
-> server=localhost;port=3306;
+> server=localhost;
+>
+> port=3306;
 >
 > database=desafioapi;
 >
