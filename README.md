@@ -179,3 +179,8 @@ Response:
 ## Authors
 
 - **Leonardo Machado** - _LOMH_ - [LeoMac00](https://github.com/leomac00)
+
+## TODO
+
+- Remove Ranks from GetRank() method in PoliceOfficer model and insert them in a database table;
+- Remove Roles from GetRole() method in User model and insert them in a database table;
